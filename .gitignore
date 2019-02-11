@@ -1,0 +1,8 @@
+*
+!*.*
+!*/
+!Makefile
+*.o
+.settings/
+.project
+.cproject
