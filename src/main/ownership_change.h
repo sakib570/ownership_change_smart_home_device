@@ -1,0 +1,4 @@
+#ifndef OWNERSHIP_CHANGE_H_
+#define OWNERSHIP_CHANGE_H_
+
+#endif /* OWNERSHIP_CHANGE_H_ */
