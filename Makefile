@@ -1,12 +1,14 @@
 CXXFLAGS =	-O2 -g -Wall -fmessage-length=0  
 
-OBJS =		ownership_change.o
+DIR  =		src/main
 
-LIBS =		-lbluetooth
+OBJS =		$(DIR)/ownership_change.o
 
-DEPS = 		ownership_change.h
+LIBS =		
 
-TARGET =	ownership_change
+DEPS = 		$(DIR)/ownership_change.h
+
+TARGET =	$(DIR)/ownership_change
 
 $(TARGET):	$(OBJS)
 	$(CXX) -o $(TARGET) $(OBJS) $(LIBS) $(DEPS)
