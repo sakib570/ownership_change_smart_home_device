@@ -3,6 +3,7 @@
 !*/
 !Makefile
 *.o
+*.exe
 .settings/
 .project
 .cproject
