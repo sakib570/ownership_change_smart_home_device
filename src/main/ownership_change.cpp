@@ -15,6 +15,12 @@ int main(void){
 	return 0;
 }
 
+void _begin_thread(pthread_t thread_id, void (*function_name(void *))){
+	if(pthread_create(&thread_id, NULL, function_name, NULL) < 0){
+		    perror("could not create thread");
+	}
+}
+
 void change_device_name(void){
 	int response;
 
