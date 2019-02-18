@@ -4,7 +4,7 @@ DIR  =		src/main
 
 OBJS =		$(DIR)/ownership_change.o
 
-LIBS =		
+LIBS =		-lpthread
 
 DEPS = 		$(DIR)/ownership_change.h
 
