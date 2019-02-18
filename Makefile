@@ -8,7 +8,7 @@ LIBS =
 
 DEPS = 		$(DIR)/ownership_change.h
 
-TARGET =	$(DIR)/ownership_change
+TARGET =	ownership_change
 
 $(TARGET):	$(OBJS)
 	$(CXX) -o $(TARGET) $(OBJS) $(LIBS) $(DEPS)
