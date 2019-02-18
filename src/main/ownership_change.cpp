@@ -38,3 +38,33 @@ int turn_on_discoverable_mode(void){
 	return system("hciconfig hci0 piscan");
 }
 
+char* execute_shell_command(char *cmd, char output[]){
+	FILE *fp;
+	char tmp_buf[128];
+	int count = 0;
+	char *response;
+
+	if ((fp = popen(cmd, "r")) == NULL) {
+		printf("Error opening pipe!\n");
+	}
+
+	while(1){
+		if(feof(fp) || count >= 1){
+			break;
+		}
+		memset(tmp_buf, 0 ,128);
+		response = fgets(tmp_buf, 128, fp);
+
+		if(strstr(tmp_buf, "Controller"))
+			continue;
+		memcpy((output + (count*128)),tmp_buf, 128);
+		count++;
+	}
+	if(pclose(fp))  {
+		printf("Command not found or exited with error status. %s\n",response);
+	}
+
+	return output;
+}
+
+
