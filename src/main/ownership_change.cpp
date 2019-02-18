@@ -1,7 +1,11 @@
 #include "ownership_change.h"
 
 char buf[BUFLEN];
+char socket_buf[BUFLEN];
 pthread_t device_info_thread;
+int sockfd, send_sockfd;
+struct sockaddr_in serv_addr, client_addr;
+socklen_t client_sock_len = sizeof(client_addr);
 
 int main(void){
 
@@ -82,4 +86,29 @@ void* get_paired_device(void *){
 	pthread_exit(0);
 	return NULL;
 }
+
+void* create_server(void *){
+
+	int len;
+	sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+	if (sockfd < 0)
+		perror("ERROR opening socket");
+	printf("Server Started\n");
+	memset((char *) &serv_addr,0, sizeof(serv_addr));
+	serv_addr.sin_family = AF_INET;
+	serv_addr.sin_addr.s_addr = INADDR_ANY;
+	serv_addr.sin_port = htons(PORTNUM);
+	if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
+		perror("ERROR on binding");
+	while(1){
+		memset(socket_buf, 0, BUFLEN);
+		if ((len = recvfrom(sockfd, socket_buf, BUFLEN, 0, (struct sockaddr *)&client_addr, &client_sock_len))==-1)
+			perror("Receive Failed!!");
+		//parser(socket_buf,len);
+		if(DEBUG_LEVEL > 1)
+			printf("Received packet from %s:%d\nLen = %d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port), len);
+	}
+
+}
+
 
