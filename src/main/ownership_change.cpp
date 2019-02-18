@@ -8,9 +8,12 @@ int main(void){
 void change_device_name(void){
 	int response;
 
-	response = system("hciconfig hci0 name 'OWCH_BT_Device'");
-	response = system("hciconfig hci0 down");
-	response = system("hciconfig hci0 up");
-	if(response == 0)
-		printf("Device Name Changed..\n");
+	response = system("hciconfig hci0 name 'OWCH_BT_Device' > /dev/null 2>&1");
+	response = system("hciconfig hci0 down > /dev/null 2>&1");
+	response = system("hciconfig hci0 up > /dev/null 2>&1");
+
+	if(response != 0)
+		printf("Failed to change the device name..\n");
+	else
+		printf("Device name changed..\n");
 }
