@@ -5,5 +5,6 @@
 #include <stdlib.h>
 
 void change_device_name(void);
+int turn_on_discoverable_mode(void);
 
 #endif /* OWNERSHIP_CHANGE_H_ */
