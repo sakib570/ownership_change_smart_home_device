@@ -1,6 +1,7 @@
 #include "ownership_change.h"
 
 char buf[BUFLEN];
+pthread_t device_info_thread;
 
 int main(void){
 
@@ -13,6 +14,8 @@ int main(void){
 		printf("Discoverable Mode On...\n");
 	else
 		printf("*****Failed to Set Discoverable Mode On*****\n");
+
+	_begin_thread(device_info_thread, get_paired_device);
 
 	return 0;
 }
