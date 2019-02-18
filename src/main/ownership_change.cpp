@@ -1,5 +1,7 @@
 #include "ownership_change.h"
 
+char buf[BUFLEN];
+
 int main(void){
 
 	int response;
@@ -67,4 +69,14 @@ char* execute_shell_command(char *cmd, char output[]){
 	return output;
 }
 
+
+void* get_paired_device(void *){
+
+	char *cmd = (char *)"bluetoothctl";
+	//printf("%s\n", execute_shell_command(cmd));
+	execute_shell_command(cmd, buf);
+
+	pthread_exit(0);
+	return NULL;
+}
 
