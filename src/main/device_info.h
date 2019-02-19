@@ -19,4 +19,6 @@ typedef struct {
 	uint16_t port;
 }device_info;
 
+char* get_own_ipadress();
+
 #endif /* DEVICE_INFO_H_ */
