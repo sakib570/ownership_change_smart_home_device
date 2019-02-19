@@ -2,7 +2,7 @@
 
 char buf[BUFLEN];
 char socket_buf[BUFLEN];
-pthread_t device_info_thread;
+pthread_t device_info_thread, server_thread;
 int sockfd, send_sockfd;
 struct sockaddr_in serv_addr, client_addr;
 socklen_t client_sock_len = sizeof(client_addr);
@@ -20,6 +20,9 @@ int main(void){
 		printf("*****Failed to Set Discoverable Mode On*****\n");
 
 	_begin_thread(device_info_thread, get_paired_device);
+	_begin_thread(server_thread, create_server);
+
+	while(1);
 
 	return 0;
 }
