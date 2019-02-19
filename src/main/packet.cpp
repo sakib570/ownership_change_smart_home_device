@@ -77,3 +77,20 @@ struct generic_packet* create_profile_list_packet(char profile_list[1024][11], i
 	//printf("Payload: %s\n",profile_list_packet->payload);
 	return profile_list_packet;
 }
+
+struct generic_packet* create_profile_authetication_response_packet(int result){
+	struct generic_packet *profile_authetication_response_packet = (struct generic_packet*)malloc(sizeof(struct generic_packet));
+	profile_authetication_response_packet->header.version = PROTOCOL_VERSION;
+	profile_authetication_response_packet->header.message_type = MSG_PROFILE_AUTHENTICATION_RESPONSE;
+	profile_authetication_response_packet->header.reserved = RESERVED;
+	profile_authetication_response_packet->header.payload_length = htons(sizeof(AUTHENTICATION_SUCCESS));
+	memset(profile_authetication_response_packet->header.sender_ip, '\0', 15);
+	strcpy(profile_authetication_response_packet->header.sender_ip, get_own_ipadress());
+	sprintf(profile_authetication_response_packet->header.sender_port,"%d", PORTNUM);
+	if(result == 1)
+		strcpy(profile_authetication_response_packet->payload, AUTHENTICATION_SUCCESS);
+	else
+		strcpy(profile_authetication_response_packet->payload, AUTHENTICATION_FAIL);
+	return profile_authetication_response_packet;
+}
+
