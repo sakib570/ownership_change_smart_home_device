@@ -60,3 +60,20 @@ struct generic_packet* create_pw_request_packet(){
 	return pw_request_packet;
 }
 
+struct generic_packet* create_profile_list_packet(char profile_list[1024][11], int total_count){
+	struct generic_packet *profile_list_packet = (struct generic_packet*)malloc(sizeof(struct generic_packet));
+	//printf("Total Count Received: %d\n",total_count);
+	profile_list_packet->header.version = PROTOCOL_VERSION;
+	profile_list_packet->header.message_type = MSG_PROFILE_LIST_RESPONSE;
+	profile_list_packet->header.reserved = RESERVED;
+	profile_list_packet->header.payload_length = htons(((total_count)*11));
+	memset(profile_list_packet->header.sender_ip, '\0', 15);
+	strcpy(profile_list_packet->header.sender_ip, get_own_ipadress());
+	sprintf(profile_list_packet->header.sender_port,"%d", PORTNUM);
+	for(int i = 0; i<total_count; i++){
+		memset(profile_list_packet->payload+(i*11), '\0', 11);
+		strcpy(profile_list_packet->payload+(i*11), profile_list[i]);
+	}
+	//printf("Payload: %s\n",profile_list_packet->payload);
+	return profile_list_packet;
+}
