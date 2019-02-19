@@ -82,8 +82,8 @@ char* execute_shell_command(char *cmd, char output[]){
 
 void* get_paired_device(void *){
 
-	char *cmd = (char *)"bluetoothctl";
-	//printf("%s\n", execute_shell_command(cmd));
+	char *cmd = (char *)"echo list | bluetoothctl";
+	//printf("%s\n", execute_shell_command(cmd, buf));
 	execute_shell_command(cmd, buf);
 
 	pthread_exit(0);
