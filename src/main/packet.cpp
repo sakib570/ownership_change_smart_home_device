@@ -30,3 +30,18 @@ struct generic_packet* create_pw_confirmation_packet(){
 
 	return pw_confirmation_packet;
 }
+
+struct generic_packet* create_challenge_packet(){
+	struct generic_packet *challenge_packet = (struct generic_packet*)malloc(sizeof(struct generic_packet));
+
+	challenge_packet->header.version = PROTOCOL_VERSION;
+	challenge_packet->header.message_type = MSG_CHALLENGE;
+	challenge_packet->header.reserved = RESERVED;
+	challenge_packet->header.payload_length = htons(sizeof(CHALLENGE_REQUEST_CODE));
+	memset(challenge_packet->header.sender_ip, '\0', 15);
+	strcpy(challenge_packet->header.sender_ip, get_own_ipadress());
+	sprintf(challenge_packet->header.sender_port,"%d", PORTNUM);
+	strcpy(challenge_packet->payload, CHALLENGE_REQUEST_CODE);
+
+	return challenge_packet;
+}
