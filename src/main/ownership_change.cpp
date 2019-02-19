@@ -1,4 +1,5 @@
 #include "ownership_change.h"
+#include "packet.h"
 
 char buf[BUFLEN];
 char socket_buf[BUFLEN];
@@ -112,6 +113,20 @@ void* create_server(void *){
 			printf("Received packet from %s:%d\nLen = %d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port), len);
 	}
 
+}
+
+void parser(char rcv_buf[], int length){
+	if(DEBUG_LEVEL > 1){
+		int i;
+		for(i=0;i<length;i++)
+				printf("%d ",rcv_buf[i]);
+		printf("\n");
+	}
+
+	struct generic_packet* rcv_packet = (struct generic_packet *)rcv_buf;
+
+	if(rcv_packet->header.version != PROTOCOL_VERSION)
+		perror("Invalid Protocol Version\n");
 }
 
 

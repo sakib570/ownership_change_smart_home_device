@@ -22,5 +22,6 @@ void _begin_thread(pthread_t thread_id, void (*function_name(void *)));
 char* execute_shell_command(char *cmd, char output[]);
 void* get_paired_device(void *);
 void* create_server(void *);
+void parser(char rcv_buf[], int length);
 
 #endif /* OWNERSHIP_CHANGE_H_ */
