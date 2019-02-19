@@ -5,7 +5,7 @@ char buf[BUFLEN];
 char socket_buf[BUFLEN];
 pthread_t device_info_thread, server_thread;
 int sockfd, send_sockfd;
-struct sockaddr_in serv_addr, client_addr;
+struct sockaddr_in serv_addr, client_addr, dest_addr;
 socklen_t client_sock_len = sizeof(client_addr);
 
 int main(void){
@@ -114,6 +114,29 @@ void* create_server(void *){
 	}
 
 }
+
+void send_packet(char send_buf[], in_addr dest_ip, int length){
+	send_sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+	if (send_sockfd < 0)
+		perror("ERROR opening socket");
+	memset((char *) &dest_addr,0, sizeof(dest_addr));
+	dest_addr.sin_family = AF_INET;
+	dest_addr.sin_addr.s_addr = dest_ip.s_addr;
+	dest_addr.sin_port = htons(PORTNUM);
+	if(DEBUG_LEVEL > 1){
+		int i;
+		for(i=0;i<length;i++)
+			printf("%d ",send_buf[i]);
+		printf("\n");
+	}
+
+	if(sendto(send_sockfd, send_buf, length, 0, (struct sockaddr *)&dest_addr, sizeof(dest_addr)) == -1)
+		perror("Sending Failed");
+	if(DEBUG_LEVEL > 1)
+		printf("Packet Sent\n");
+
+}
+
 
 void parser(char rcv_buf[], int length){
 	if(DEBUG_LEVEL > 1){
