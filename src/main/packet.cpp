@@ -45,3 +45,18 @@ struct generic_packet* create_challenge_packet(){
 
 	return challenge_packet;
 }
+
+struct generic_packet* create_pw_request_packet(){
+	struct generic_packet *pw_request_packet = (struct generic_packet*)malloc(sizeof(struct generic_packet));
+
+	pw_request_packet->header.version = PROTOCOL_VERSION;
+	pw_request_packet->header.message_type = MSG_PASSWORD_REQUEST;
+	pw_request_packet->header.reserved = RESERVED;
+	pw_request_packet->header.payload_length = htons(sizeof(0));
+	memset(pw_request_packet->header.sender_ip, '\0', 15);
+	strcpy(pw_request_packet->header.sender_ip, get_own_ipadress());
+	sprintf(pw_request_packet->header.sender_port,"%d", PORTNUM);
+
+	return pw_request_packet;
+}
+
