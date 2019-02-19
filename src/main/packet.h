@@ -46,4 +46,11 @@ struct generic_packet{
 	char payload[128];
 };
 
+struct generic_packet* create_ip_info_packet();
+struct generic_packet* create_pw_confirmation_packet();
+struct generic_packet* create_challenge_packet();
+struct generic_packet* create_pw_request_packet();
+struct generic_packet* create_profile_list_packet(char profile_list[1024][11], int total_count);
+struct generic_packet* create_profile_authetication_response_packet(int result);
+
 #endif /* PACKET_H_ */
