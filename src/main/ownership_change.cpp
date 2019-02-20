@@ -1,5 +1,6 @@
 #include "ownership_change.h"
 #include "packet.h"
+#include "device_info.h"
 
 char buf[BUFLEN];
 char socket_buf[BUFLEN];
@@ -7,6 +8,7 @@ pthread_t device_info_thread, server_thread;
 int sockfd, send_sockfd;
 struct sockaddr_in serv_addr, client_addr, dest_addr;
 socklen_t client_sock_len = sizeof(client_addr);
+device_info *master_device;
 
 int main(void){
 
@@ -150,6 +152,17 @@ void parser(char rcv_buf[], int length){
 
 	if(rcv_packet->header.version != PROTOCOL_VERSION)
 		perror("Invalid Protocol Version\n");
+}
+
+void get_master_device_info(struct generic_packet *rcv_packet){
+	if(strcmp(rcv_packet->payload, master_device->device_name))
+		printf("Not the Master Device!!!\n");
+	else{
+		master_device->ip.s_addr = inet_addr(rcv_packet->header.sender_ip);
+		master_device->port = atoi(rcv_packet->header.sender_port);
+		if(DEBUG_LEVEL>2)
+			printf("Device IP: %s\nDevice Port: %d\n", inet_ntoa(master_device->ip), atoi(rcv_packet->header.sender_port));
+	}
 }
 
 
