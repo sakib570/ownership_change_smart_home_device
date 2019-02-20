@@ -9,6 +9,7 @@ int sockfd, send_sockfd;
 struct sockaddr_in serv_addr, client_addr, dest_addr;
 socklen_t client_sock_len = sizeof(client_addr);
 device_info *master_device;
+bool is_device_configured = false;
 
 int main(void){
 
@@ -152,6 +153,16 @@ void parser(char rcv_buf[], int length){
 
 	if(rcv_packet->header.version != PROTOCOL_VERSION)
 		perror("Invalid Protocol Version\n");
+	else if(rcv_packet->header.message_type == MSG_IP_BROADCAST){
+			if(!is_device_configured){
+				printf("Configuration Received\n");
+				/*master_device = parse_device_info(buf);
+				printf("Trusted Device Name: %s\nTrusted Device Address: %s\n",master_device->device_name, master_device->bt_address);*/
+				get_master_device_info(rcv_packet);
+				send_packet((char*)create_ip_info_packet(),master_device->ip, (int)((int)sizeof(PACKET_HEADER)+(int)sizeof(DEVICE_NAME)));
+			}
+		}
+
 }
 
 void get_master_device_info(struct generic_packet *rcv_packet){
