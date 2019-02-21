@@ -241,10 +241,20 @@ void parser(char rcv_buf[], int length){
 				}
 			}
 		}
-
-
-
-
+	else if(rcv_packet->header.message_type == MSG_PASSWORD_RESPONSE){
+			char password[BUFLEN];
+			get_owner_password(password);
+			if(strcmp(rcv_packet->payload, password) == 0){
+				printf("Challenge Satisfied..New Known Context Created\n");
+				memcpy(known_context[counter], changed_context, BUFLEN);
+				counter++;
+			}
+			else{
+				printf("Owner Authentication Failed\n");
+				printf("New user profile created..Previous Owner Profile Encrypted\n");
+			}
+			challenge_response_recieved = true;
+		}
 }
 
 void get_master_device_info(struct generic_packet *rcv_packet){
