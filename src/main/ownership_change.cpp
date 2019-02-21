@@ -218,6 +218,30 @@ void parser(char rcv_buf[], int length){
 					printf("Ignoring Identity Broadcast packet\n");
 			}
 		}
+	else if(rcv_packet->header.message_type == MSG_CHALLENGE_RESPONSE){
+			if(strcmp(rcv_packet->header.sender_ip, inet_ntoa(master_device->ip)) != 0){
+				printf("Unauthorised Access!!\n");
+			}
+			else{
+				if(strcmp(rcv_packet->payload, CHALLENGE_RESPONSE_CODE) != 0)
+					printf("Challenge Not Satisfied.\n");
+				else{
+					printf("Challenge Satisfied..New Known Context Created\n");
+					save_context(NOT_FIRST_CONTEXT);
+					_begin_thread(check_ssid_thread, check_wifi_ssid);
+					challenge_response_recieved = true;
+					/*memcpy(known_context[counter], changed_context, BUFLEN);
+					counter++;
+					challenge_response_recieved = true;
+					if(DEBUG_LEVEL > 1){
+						printf("Current Known Contexts..\n");
+						for(int i=0;i<counter;i++)
+							printf("%d. %s\n", i+1, known_context[i]);
+					}*/
+				}
+			}
+		}
+
 
 
 
