@@ -20,6 +20,11 @@ typedef struct {
 }device_info;
 
 typedef struct {
+	char bt_address[18];
+	char device_name[1006];
+}extra_info;
+
+typedef struct {
 	char profile_name[11];
 	char passsword[128];
 }profile_info;
