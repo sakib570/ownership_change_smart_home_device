@@ -19,6 +19,11 @@ typedef struct {
 	uint16_t port;
 }device_info;
 
+typedef struct {
+	char profile_name[11];
+	char passsword[128];
+}profile_info;
+
 char* get_own_ipadress();
 
 #endif /* DEVICE_INFO_H_ */
