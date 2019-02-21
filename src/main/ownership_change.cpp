@@ -420,4 +420,49 @@ void* check_wifi_ssid(void *){
 	return NULL;
 }
 
+void verify_owner(struct generic_packet *rcv_packet){
+	char line[BUFLEN];
+	char profile_name[11];
+	char password_hash[BUFLEN];
+	in_addr dest_ip;
+
+	profile_info *p_info = (profile_info*)rcv_packet->payload;
+	dest_ip.s_addr = inet_addr(rcv_packet->header.sender_ip);
+	if(p_info->passsword[strlen(p_info->passsword) - 1] == '\n')
+	{
+		p_info->passsword[strlen(p_info->passsword) - 1] = '\0';
+	}
+
+	if(DEBUG_LEVEL>2)
+		printf("Received Profile Name: %s Password: %s Length: %d\n", p_info->profile_name, p_info->passsword, (int)strlen(p_info->passsword));
+	FILE *fp = fopen("Password.txt", "r");
+	if (fp == NULL){
+		printf("Error opening file!\n");
+		exit(1);
+	}
+	while(fgets(line, BUFLEN, (FILE*) fp))
+	{
+		char e = sscanf(line, "%s %s", profile_name, password_hash);
+		if(DEBUG_LEVEL>2)
+			printf("Name: %s Password %s Length %d\n", profile_name, password_hash, (int)strlen(password_hash));
+		if(strcmp(profile_name, p_info->profile_name) == 0){
+			if(strcmp(password_hash, p_info->passsword) == 0){
+				printf("Profile %s Activated\n", p_info->profile_name);
+				strcpy(active_profile, p_info->profile_name);
+				save_context(FIRST_CONTEXT);
+				_begin_thread(check_ssid_thread, check_wifi_ssid);
+				send_packet((char*)create_profile_authetication_response_packet(1), dest_ip, (int)((int)sizeof(PACKET_HEADER)+(int)sizeof(AUTHENTICATION_SUCCESS)));
+			}
+			else{
+				send_packet((char*)create_profile_authetication_response_packet(0), dest_ip, (int)((int)sizeof(PACKET_HEADER)+(int)sizeof(AUTHENTICATION_SUCCESS)));
+				//printf("Password Mismatch %d", strcmp(password_hash, p_info->passsword));
+				printf("Authentication Failure!! Unable Activate Profile\n");
+			}
+			break;
+		}
+	}
+	fclose(fp);
+
+}
+
 

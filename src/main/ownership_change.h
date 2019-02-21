@@ -39,5 +39,6 @@ void get_trusted_device_identity_for_new_profile(struct generic_packet *rcv_pack
 void get_owner_password(char password[]);
 void send_profile_list(in_addr dest_ip);
 void* check_wifi_ssid(void *);
+void verify_owner(struct generic_packet *rcv_packet);
 
 #endif /* OWNERSHIP_CHANGE_H_ */
