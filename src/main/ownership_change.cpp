@@ -2,8 +2,10 @@
 #include "packet.h"
 #include "device_info.h"
 
-char buf[BUFLEN], active_profile[11];;
+char buf[BUFLEN], ssid_buf[BUFLEN];
+char active_profile[11];;
 char socket_buf[BUFLEN];
+char *changed_context;
 pthread_t device_info_thread, server_thread;
 int sockfd, send_sockfd;
 struct sockaddr_in serv_addr, client_addr, dest_addr;
@@ -208,6 +210,41 @@ void save_password(struct generic_packet* rcv_packet, int length){
 
 	//fprintf(fp, "%s,%s\n", master_device->device_name, rcv_packet->payload);
 	fprintf(fp, "%s %s\n", p_info->profile_name, p_info->passsword);
+	fclose(fp);
+}
+
+void save_context(int isFirstContext){
+	char *cmd = (char *)"iwconfig 2>/dev/null | grep ESSID | cut -d: -f2";
+	execute_shell_command(cmd, ssid_buf);
+	char *current_ssid = (char *)malloc(BUFLEN);
+	memcpy(current_ssid, ssid_buf, BUFLEN);
+	char file_path[BUFLEN];
+    sprintf(file_path,"%s/%s",active_profile,"known_context.txt");
+
+	FILE *fp = fopen(file_path, "a+");
+	if (fp == NULL)
+	{
+		printf("Error opening file!\n");
+		exit(1);
+	}
+	if(isFirstContext == FIRST_CONTEXT){
+
+		if(current_ssid[strlen(current_ssid) - 1] == '\n')
+		{
+			current_ssid[strlen(current_ssid) - 1] = '\0';
+		}
+		printf("Context %s stored as Known Context\n", current_ssid);
+		fprintf(fp, "%s\n", current_ssid);
+	}
+	else{
+		//printf("Context %s stored as Known Context\n", current_ssid);
+		if(changed_context[strlen(changed_context) - 1] == '\n')
+		{
+			changed_context[strlen(changed_context) - 1] = '\0';
+		}
+		printf("Storing %s in %s", changed_context, file_path);
+		fprintf(fp, "%s\n", changed_context);
+	}
 	fclose(fp);
 }
 

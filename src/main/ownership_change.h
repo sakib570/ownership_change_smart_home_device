@@ -16,6 +16,9 @@
 #define PORTNUM				6346
 #define DEBUG_LEVEL			   1
 
+#define FIRST_CONTEXT              1
+#define NOT_FIRST_CONTEXT          0
+
 
 void change_device_name(void);
 int turn_on_discoverable_mode(void);
