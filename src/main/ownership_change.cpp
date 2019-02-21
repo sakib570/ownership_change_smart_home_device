@@ -7,6 +7,7 @@ char active_profile[11];;
 char socket_buf[BUFLEN];
 char *changed_context;
 char known_context[MAX_ARRAY_SIZE][BUFLEN];
+char profile_list[BUFLEN][MAX_PROFILE_NAME_SIZE];
 pthread_t device_info_thread, server_thread;
 int sockfd, send_sockfd, counter = 0;
 struct sockaddr_in serv_addr, client_addr, dest_addr;
@@ -16,7 +17,7 @@ bool is_device_configured = false, is_identity_required = false;
 bool new_control_device_found = false;
 bool is_master_device_info_updated = false, is_master_device_found = false;
 bool is_trusted_device_identity_update_required =false;
-
+bool is_profile_list_sent =false;
 
 int main(void){
 
@@ -337,6 +338,25 @@ void get_owner_password(char password[]){
 
 	fgets(password, BUFLEN, (FILE*) fp);
 
+}
+
+void send_profile_list(in_addr dest_ip){
+	int count = 0;
+	char line[BUFLEN];
+	FILE *fp = fopen("Password.txt", "r");
+	if (fp == NULL){
+		printf("Error opening file!\n");
+		exit(1);
+	}
+	while(fgets(line, BUFLEN, (FILE*) fp))
+	{
+		char e = sscanf(line, "%s", profile_list[count]);
+		//printf("%s\n",profile_list[count]);
+		count++;
+	}
+	fclose(fp);
+	send_packet((char*)create_profile_list_packet(profile_list, count) ,dest_ip, (int)((int)sizeof(PACKET_HEADER)+(int)(count*11)));
+	is_profile_list_sent = true;
 }
 
 

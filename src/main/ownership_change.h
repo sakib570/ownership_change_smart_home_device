@@ -19,6 +19,7 @@
 #define FIRST_CONTEXT              1
 #define NOT_FIRST_CONTEXT          0
 #define MAX_ARRAY_SIZE		 	 100
+#define MAX_PROFILE_NAME_SIZE	  11
 
 
 void change_device_name(void);
@@ -36,5 +37,6 @@ void get_known_context_list();
 void get_control_device_identity(struct generic_packet *rcv_packet);
 void get_trusted_device_identity_for_new_profile(struct generic_packet *rcv_packet);
 void get_owner_password(char password[]);
+void send_profile_list(in_addr dest_ip);
 
 #endif /* OWNERSHIP_CHANGE_H_ */
