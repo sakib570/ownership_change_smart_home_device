@@ -10,11 +10,14 @@ char known_context[MAX_ARRAY_SIZE][BUFLEN];
 char profile_list[BUFLEN][MAX_PROFILE_NAME_SIZE];
 pthread_t device_info_thread, server_thread, check_ssid_thread;
 int sockfd, send_sockfd, counter = 0;
+int max_rsp, num_rsp;
+int dev_id, sock, len, flags, response;
 struct sockaddr_in serv_addr, client_addr, dest_addr;
 socklen_t client_sock_len = sizeof(client_addr);
 device_info *master_device, *new_master_device;
+inquiry_info *ii = NULL;
 bool is_device_configured = false, is_identity_required = false;
-bool new_control_device_found = false;
+bool new_control_device_found = false, is_search_finished = false;
 bool is_master_device_info_updated = false, is_master_device_found = false;
 bool is_trusted_device_identity_update_required =false;
 bool is_profile_list_sent =false, change_detected = false;
@@ -463,6 +466,53 @@ void verify_owner(struct generic_packet *rcv_packet){
 	}
 	fclose(fp);
 
+}
+
+void* search_bt_device(void *){
+	int i;
+	char addr[19] = { 0 };
+	char name[248] = { 0 };
+
+	printf("Ownership Change Detected\n");
+	printf("Searching for Trusted Device\n");
+	is_identity_required = true;
+	dev_id = hci_get_route(NULL);
+	sock = hci_open_dev( dev_id );
+	if (dev_id < 0 || sock < 0) {
+		perror("opening socket");
+		exit(1);
+	}
+
+	len  = 8;
+	max_rsp = 255;
+	flags = IREQ_CACHE_FLUSH;
+	ii = (inquiry_info*)malloc(max_rsp * sizeof(inquiry_info));
+
+	num_rsp = hci_inquiry(dev_id, len, max_rsp, NULL, &ii, flags);
+	if( num_rsp < 0 ) perror("hci_inquiry");
+	if(DEBUG_LEVEL > 2)
+		printf("Number Of Device Found: %d\n",num_rsp);
+
+	for (i = 0; i < num_rsp; i++) {
+		if(DEBUG_LEVEL > 2)
+			printf("Printing Device\n");
+		ba2str(&(ii+i)->bdaddr, addr);
+		memset(name, 0, sizeof(name));
+		if (hci_read_remote_name(sock, &(ii+i)->bdaddr, sizeof(name),name, 0) < 0)
+			strcpy(name, "[unknown]");
+		if(DEBUG_LEVEL > 2)
+			printf("%s  %s\n", addr, name);
+		if(strcmp(master_device->bt_address, addr) == 0 && strcmp(master_device->device_name, name) == 0){
+			//printf("Trusted Device Found.\n");
+			is_master_device_found = true;
+		}
+	}
+
+	is_search_finished = true;
+	free(ii);
+	close(sock);
+
+	return NULL;
 }
 
 

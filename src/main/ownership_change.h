@@ -10,6 +10,9 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <sys/stat.h>
+#include <bluetooth/bluetooth.h>
+#include <bluetooth/hci.h>
+#include <bluetooth/hci_lib.h>
 
 
 #define BUFLEN  			1024
@@ -40,5 +43,6 @@ void get_owner_password(char password[]);
 void send_profile_list(in_addr dest_ip);
 void* check_wifi_ssid(void *);
 void verify_owner(struct generic_packet *rcv_packet);
+void* search_bt_device(void *);
 
 #endif /* OWNERSHIP_CHANGE_H_ */
