@@ -255,6 +255,19 @@ void parser(char rcv_buf[], int length){
 			}
 			challenge_response_recieved = true;
 		}
+	else if(rcv_packet->header.message_type == MSG_PROFILE_REQUEST){
+			if(is_device_configured){
+				in_addr dest_ip;
+				if(active_profile[0] != '\0'){
+					printf("Currently Active profile: %s Encrypted\n", active_profile);
+					memset(active_profile, '\0', sizeof(active_profile));
+				}
+				pthread_cancel(check_ssid_thread);
+				dest_ip.s_addr = inet_addr(rcv_packet->header.sender_ip);
+				send_profile_list(dest_ip);
+			}
+
+		}
 }
 
 void get_master_device_info(struct generic_packet *rcv_packet){
