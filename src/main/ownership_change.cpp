@@ -22,7 +22,7 @@ bool new_control_device_found = false, is_search_finished = false;
 bool is_master_device_info_updated = false, is_master_device_found = false;
 bool is_trusted_device_identity_update_required =false;
 bool is_profile_list_sent =false, change_detected = false;
-bool challenge_response_recieved = false;
+bool challenge_response_recieved = false, is_new_profile_creation_required = false;
 
 int main(void){
 
@@ -175,6 +175,37 @@ void parser(char rcv_buf[], int length){
 				send_packet((char*)create_ip_info_packet(),master_device->ip, (int)((int)sizeof(PACKET_HEADER)+(int)sizeof(DEVICE_NAME)));
 			}
 		}
+	else if(rcv_packet->header.message_type == MSG_PASSWORD){
+			if(!is_device_configured){
+				printf("Profile Information Received\n");
+				if(strcmp(rcv_packet->header.sender_ip, inet_ntoa(master_device->ip)) != 0){
+					printf("Not the Master Device!!!");
+				}
+				else{
+					save_password(rcv_packet, length);
+					save_context(FIRST_CONTEXT);
+					save_trusted_device();
+					_begin_thread(check_ssid_thread, check_wifi_ssid);
+					send_packet((char*)create_pw_confirmation_packet(),master_device->ip, (int)((int)sizeof(PACKET_HEADER)+(int)sizeof(PW_CONFIRMATION_CODE)));
+					is_device_configured = true;
+					printf("Profile %s Activated\n",active_profile);
+					printf("Ownership Change Detection Started\n");
+				}
+			}
+			else if(is_new_profile_creation_required){
+				printf("Profile Information Received\n");
+				save_password(rcv_packet, length);
+				save_context(FIRST_CONTEXT);
+				save_trusted_device();
+				_begin_thread(check_ssid_thread, check_wifi_ssid);
+				send_packet((char*)create_pw_confirmation_packet(),master_device->ip, (int)((int)sizeof(PACKET_HEADER)+(int)sizeof(PW_CONFIRMATION_CODE)));
+				is_device_configured = true;
+				printf("Profile %s Activated\n",active_profile);
+				printf("Ownership Change Detection Started\n");
+			}
+
+		}
+
 
 }
 
