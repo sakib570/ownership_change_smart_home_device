@@ -35,5 +35,6 @@ void save_trusted_device();
 void get_known_context_list();
 void get_control_device_identity(struct generic_packet *rcv_packet);
 void get_trusted_device_identity_for_new_profile(struct generic_packet *rcv_packet);
+void get_owner_password(char password[]);
 
 #endif /* OWNERSHIP_CHANGE_H_ */

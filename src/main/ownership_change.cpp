@@ -327,4 +327,16 @@ void get_trusted_device_identity_for_new_profile(struct generic_packet *rcv_pack
 	is_trusted_device_identity_update_required = false;
 }
 
+void get_owner_password(char password[]){
+	FILE *fp = fopen("Password.txt", "r");
+	if (fp == NULL)
+	{
+		printf("Error opening file!\n");
+		exit(1);
+	}
+
+	fgets(password, BUFLEN, (FILE*) fp);
+
+}
+
 
