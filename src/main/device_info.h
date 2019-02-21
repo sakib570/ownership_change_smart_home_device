@@ -29,6 +29,7 @@ typedef struct {
 	char passsword[128];
 }profile_info;
 
+device_info* parse_device_info(char* buffer);
 char* get_own_ipadress();
 
 #endif /* DEVICE_INFO_H_ */

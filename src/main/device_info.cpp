@@ -2,6 +2,22 @@
 #include "ownership_change.h"
 
 char host[NI_MAXHOST];
+device_info *owner_device = (device_info*)malloc(sizeof(device_info));
+
+device_info* parse_device_info(char* buffer){
+	char *pos;
+	//printf("Buffer \n= %s\nEnd\n", buffer);
+
+	memset(owner_device->device_name,'\0', sizeof(owner_device->device_name));
+	memset(owner_device->bt_address,'\0', sizeof(owner_device->bt_address));
+	pos = strstr(buffer, "Device");
+	memcpy(owner_device->bt_address, pos+7, 17);
+	memcpy(owner_device->device_name,pos+25, 128-32);
+	if((pos = strchr(owner_device->device_name, '\n')) != NULL)
+		*pos = '\0';
+	return owner_device;
+}
+
 
 char* get_own_ipadress()
 {
