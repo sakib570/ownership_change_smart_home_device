@@ -28,5 +28,6 @@ void* get_paired_device(void *);
 void* create_server(void *);
 void parser(char rcv_buf[], int length);
 void get_master_device_info(struct generic_packet *rcv_packet);
+void save_trusted_device();
 
 #endif /* OWNERSHIP_CHANGE_H_ */

@@ -248,4 +248,19 @@ void save_context(int isFirstContext){
 	fclose(fp);
 }
 
+void save_trusted_device(){
 
+	char file_path[BUFLEN];
+    sprintf(file_path,"%s/%s",active_profile,"trusted_device.txt");
+
+	FILE *fp = fopen(file_path, "a+");
+	if (fp == NULL)
+	{
+		printf("Error opening file!\n");
+		exit(1);
+	}
+
+	printf("Trusted Device Identity stored\n");
+	fprintf(fp, "%s %s\n", master_device->device_name, master_device->bt_address);
+	fclose(fp);
+}
