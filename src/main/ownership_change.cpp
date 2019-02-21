@@ -2,7 +2,7 @@
 #include "packet.h"
 #include "device_info.h"
 
-char buf[BUFLEN];
+char buf[BUFLEN], active_profile[11];;
 char socket_buf[BUFLEN];
 pthread_t device_info_thread, server_thread;
 int sockfd, send_sockfd;
@@ -174,6 +174,41 @@ void get_master_device_info(struct generic_packet *rcv_packet){
 		if(DEBUG_LEVEL>2)
 			printf("Device IP: %s\nDevice Port: %d\n", inet_ntoa(master_device->ip), atoi(rcv_packet->header.sender_port));
 	}
+}
+
+void save_password(struct generic_packet* rcv_packet, int length){
+
+	//FILE *fp = fopen("Password.txt", "w");
+	FILE *fp;
+
+	profile_info *p_info = (profile_info*)rcv_packet->payload;
+	//printf("Payload: %s",rcv_packet->payload);
+	if(p_info->passsword[strlen(p_info->passsword) - 1] == '\n')
+	{
+		p_info->passsword[strlen(p_info->passsword) - 1] = '\0';
+	}
+
+	printf("Profile Name: %s Password: %s\n", p_info->profile_name, p_info->passsword);
+	strcpy(active_profile, p_info->profile_name);
+
+	struct stat st = {0};
+
+	if (stat(active_profile, &st) == -1) {
+	    mkdir(active_profile, 0777);
+	}
+	/*char file_path[BUFLEN];
+	sprintf(file_path,"%s/%s",active_profile,"Password.txt");*/
+
+	fp = fopen("Password.txt", "a+");
+	if (fp == NULL)
+	{
+		printf("Error opening file!\n");
+		exit(1);
+	}
+
+	//fprintf(fp, "%s,%s\n", master_device->device_name, rcv_packet->payload);
+	fprintf(fp, "%s %s\n", p_info->profile_name, p_info->passsword);
+	fclose(fp);
 }
 
 
