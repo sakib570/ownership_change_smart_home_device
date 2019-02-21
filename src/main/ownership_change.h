@@ -44,5 +44,6 @@ void send_profile_list(in_addr dest_ip);
 void* check_wifi_ssid(void *);
 void verify_owner(struct generic_packet *rcv_packet);
 void* search_bt_device(void *);
+void* verify_ownership_change(void *);
 
 #endif /* OWNERSHIP_CHANGE_H_ */

@@ -9,6 +9,7 @@ char *changed_context;
 char known_context[MAX_ARRAY_SIZE][BUFLEN];
 char profile_list[BUFLEN][MAX_PROFILE_NAME_SIZE];
 pthread_t device_info_thread, server_thread, check_ssid_thread;
+pthread_t bt_device_search_thread;
 int sockfd, send_sockfd, counter = 0;
 int max_rsp, num_rsp;
 int dev_id, sock, len, flags, response;
@@ -21,6 +22,7 @@ bool new_control_device_found = false, is_search_finished = false;
 bool is_master_device_info_updated = false, is_master_device_found = false;
 bool is_trusted_device_identity_update_required =false;
 bool is_profile_list_sent =false, change_detected = false;
+bool challenge_response_recieved = false;
 
 int main(void){
 
@@ -512,6 +514,59 @@ void* search_bt_device(void *){
 	free(ii);
 	close(sock);
 
+	return NULL;
+}
+
+void* verify_ownership_change(void *){
+
+	if(DEBUG_LEVEL>2)
+		printf("Waiting For Ownership Change\n");
+	while(1){
+		sleep(10);
+		if(change_detected == true){
+			change_detected = false;
+			is_search_finished = false;
+			_begin_thread(bt_device_search_thread, search_bt_device);
+			challenge_response_recieved = false;
+			is_master_device_found = false;
+			is_master_device_info_updated = false;
+			new_control_device_found = false;
+
+			while(1){
+				//printf("Inside While\n");
+				sleep(30);
+				if(is_search_finished){
+					//printf("Inside Search Finished\n");
+					if(!challenge_response_recieved){
+						//printf("Inside Response not received\n");
+						if(is_master_device_found && is_master_device_info_updated){
+							printf("Sending Challenge to Trusted Device!!!\n");
+							send_packet((char*)create_challenge_packet(),master_device->ip, (int)((int)sizeof(PACKET_HEADER)+(int)sizeof(CHALLENGE_REQUEST_CODE)));
+						}
+						else if(new_control_device_found && !is_master_device_found && !is_master_device_info_updated){
+							printf("Unable to Find Trusted Device!!!\n");
+							printf("New Control Device Found!!!\n");
+							printf("Sending Available Profile List!!!\n");
+							send_profile_list(new_master_device->ip);
+							printf("Waiting for Response..\n");
+							//printf("Requesting Password from New Control Device!!!\n");
+							//send_packet((char*)create_pw_request_packet(), new_master_device->ip, (int)((int)sizeof(PACKET_HEADER)));
+						}
+					}
+					else
+						break;
+				}
+				else
+					continue;
+			}
+
+		pthread_cancel(bt_device_search_thread);
+
+		}
+		else
+			continue;
+
+	}
 	return NULL;
 }
 
