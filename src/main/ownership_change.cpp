@@ -8,7 +8,7 @@ char socket_buf[BUFLEN];
 char *changed_context;
 char known_context[MAX_ARRAY_SIZE][BUFLEN];
 char profile_list[BUFLEN][MAX_PROFILE_NAME_SIZE];
-pthread_t device_info_thread, server_thread;
+pthread_t device_info_thread, server_thread, check_ssid_thread;
 int sockfd, send_sockfd, counter = 0;
 struct sockaddr_in serv_addr, client_addr, dest_addr;
 socklen_t client_sock_len = sizeof(client_addr);
@@ -17,7 +17,7 @@ bool is_device_configured = false, is_identity_required = false;
 bool new_control_device_found = false;
 bool is_master_device_info_updated = false, is_master_device_found = false;
 bool is_trusted_device_identity_update_required =false;
-bool is_profile_list_sent =false;
+bool is_profile_list_sent =false, change_detected = false;
 
 int main(void){
 
@@ -357,6 +357,67 @@ void send_profile_list(in_addr dest_ip){
 	fclose(fp);
 	send_packet((char*)create_profile_list_packet(profile_list, count) ,dest_ip, (int)((int)sizeof(PACKET_HEADER)+(int)(count*11)));
 	is_profile_list_sent = true;
+}
+
+void* check_wifi_ssid(void *){
+	bool is_known_context = false;
+	char *cmd = (char *)"iwconfig 2>/dev/null | grep ESSID | cut -d: -f2";
+	changed_context = (char*)malloc(BUFLEN);
+	execute_shell_command(cmd, ssid_buf);
+	char *current_ssid = (char *)malloc(BUFLEN);
+	memcpy(current_ssid, ssid_buf, BUFLEN);
+	if(current_ssid[strlen(current_ssid) - 1] == '\n')
+	{
+		current_ssid[strlen(current_ssid) - 1] = '\0';
+	}
+	if(DEBUG_LEVEL>2)
+		printf("Current SSID: %s", current_ssid);
+	//memcpy(known_context[counter], current_ssid, BUFLEN);
+	//counter++;
+	get_known_context_list();
+	char *new_ssid;
+	while(1){
+		is_known_context = false;
+		sleep(20);
+		memset(ssid_buf, 0, BUFLEN);
+		execute_shell_command(cmd, ssid_buf);
+		new_ssid = ssid_buf;
+		if(new_ssid[strlen(new_ssid) - 1] == '\n')
+		{
+			new_ssid[strlen(new_ssid) - 1] = '\0';
+		}
+
+		if(strncmp(new_ssid, (char *)current_ssid, strlen(new_ssid)) == 0){
+			continue;
+		}
+		else if(strncmp(new_ssid, "off/any", strlen("off/any")) == 0){
+			if(DEBUG_LEVEL>2)
+				printf("off/any Detected\n");
+			continue;
+		}
+		else{
+			for(int i=0;i<counter;i++){
+				if(strncmp(new_ssid, known_context[i], strlen(new_ssid)) == 0){
+					printf("Change to Known Context Detected..\n");
+					is_known_context = true;
+					break;
+				}
+			}
+
+			memset(current_ssid,0,BUFLEN);
+			memcpy(current_ssid, new_ssid, BUFLEN);
+
+			if(is_known_context)
+				continue;
+			else{
+				memset(changed_context,0, BUFLEN);
+				memcpy(changed_context, current_ssid, BUFLEN);
+				change_detected = true;
+				pthread_cancel(check_ssid_thread);
+			}
+		}
+	}
+	return NULL;
 }
 
 
