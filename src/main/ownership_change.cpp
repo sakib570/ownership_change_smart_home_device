@@ -15,6 +15,7 @@ device_info *master_device, *new_master_device;
 bool is_device_configured = false, is_identity_required = false;
 bool new_control_device_found = false;
 bool is_master_device_info_updated = false, is_master_device_found = false;
+bool is_trusted_device_identity_update_required =false;
 
 
 int main(void){
@@ -311,6 +312,19 @@ void get_control_device_identity(struct generic_packet *rcv_packet){
 		is_master_device_found = true;
 		is_identity_required = false;
 	}
+}
+
+void get_trusted_device_identity_for_new_profile(struct generic_packet *rcv_packet){
+	extra_info *info = (extra_info *)rcv_packet->payload;
+	if(DEBUG_LEVEL>2)
+		printf("Device Name: %s Device Address: %s\n", info->device_name, info->bt_address);
+
+	master_device->ip.s_addr = inet_addr(rcv_packet->header.sender_ip);
+	master_device->port = atoi(rcv_packet->header.sender_port);
+	strcpy(master_device->bt_address, info->bt_address);
+	strcpy(master_device->device_name, info->device_name);
+	printf("Trusted Device Identity Updated\n");
+	is_trusted_device_identity_update_required = false;
 }
 
 
