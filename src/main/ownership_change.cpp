@@ -275,6 +275,10 @@ void parser(char rcv_buf[], int length){
 			}
 
 		}
+	else if(rcv_packet->header.message_type == MSG_CREATE_NEW_PROFILE_REQUEST){
+			is_trusted_device_identity_update_required = true;
+			is_new_profile_creation_required = true;
+		}
 }
 
 void get_master_device_info(struct generic_packet *rcv_packet){
