@@ -268,6 +268,13 @@ void parser(char rcv_buf[], int length){
 			}
 
 		}
+	else if(rcv_packet->header.message_type == MSG_PROFILE_CHOICE_RESPONSE){
+			if(is_device_configured && is_profile_list_sent){
+				challenge_response_recieved = true;
+				verify_owner(rcv_packet);
+			}
+
+		}
 }
 
 void get_master_device_info(struct generic_packet *rcv_packet){
