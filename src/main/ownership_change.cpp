@@ -205,6 +205,20 @@ void parser(char rcv_buf[], int length){
 			}
 
 		}
+	else if(rcv_packet->header.message_type == MSG_IDENTITY_BRDCAST){
+			if(is_identity_required){
+				if(DEBUG_LEVEL>2)
+					printf("Parsing Control Device Identity\n");
+				get_control_device_identity(rcv_packet);
+			}
+			else if(is_trusted_device_identity_update_required)
+				get_trusted_device_identity_for_new_profile(rcv_packet);
+			else{
+				if(DEBUG_LEVEL > 1)
+					printf("Ignoring Identity Broadcast packet\n");
+			}
+		}
+
 
 
 }
