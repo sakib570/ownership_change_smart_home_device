@@ -18,6 +18,7 @@
 
 #define FIRST_CONTEXT              1
 #define NOT_FIRST_CONTEXT          0
+#define MAX_ARRAY_SIZE		 	 100
 
 
 void change_device_name(void);
@@ -31,5 +32,6 @@ void get_master_device_info(struct generic_packet *rcv_packet);
 void save_password(struct generic_packet* rcv_packet, int length);
 void save_context(int isFirstContext);
 void save_trusted_device();
+void get_known_context_list();
 
 #endif /* OWNERSHIP_CHANGE_H_ */

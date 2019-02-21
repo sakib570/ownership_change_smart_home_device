@@ -6,8 +6,9 @@ char buf[BUFLEN], ssid_buf[BUFLEN];
 char active_profile[11];;
 char socket_buf[BUFLEN];
 char *changed_context;
+char known_context[MAX_ARRAY_SIZE][BUFLEN];
 pthread_t device_info_thread, server_thread;
-int sockfd, send_sockfd;
+int sockfd, send_sockfd, counter = 0;
 struct sockaddr_in serv_addr, client_addr, dest_addr;
 socklen_t client_sock_len = sizeof(client_addr);
 device_info *master_device;
@@ -264,3 +265,20 @@ void save_trusted_device(){
 	fprintf(fp, "%s %s\n", master_device->device_name, master_device->bt_address);
 	fclose(fp);
 }
+
+void get_known_context_list(){
+	counter = 0;
+	char line[BUFLEN];
+	char file_path[BUFLEN];
+	sprintf(file_path,"%s/%s",active_profile,"known_context.txt");
+	FILE *fp = fopen(file_path, "r");
+	if (fp == NULL){
+		printf("Error opening file!\n");
+		exit(1);
+	}
+	while(fgets(line, BUFLEN, (FILE*) fp)){
+		memcpy(known_context[counter], line, BUFLEN);
+		counter++;
+	}
+}
+
