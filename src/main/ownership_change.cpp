@@ -11,8 +11,11 @@ pthread_t device_info_thread, server_thread;
 int sockfd, send_sockfd, counter = 0;
 struct sockaddr_in serv_addr, client_addr, dest_addr;
 socklen_t client_sock_len = sizeof(client_addr);
-device_info *master_device;
-bool is_device_configured = false;
+device_info *master_device, *new_master_device;
+bool is_device_configured = false, is_identity_required = false;
+bool new_control_device_found = false;
+bool is_master_device_info_updated = false, is_master_device_found = false;
+
 
 int main(void){
 
@@ -281,4 +284,33 @@ void get_known_context_list(){
 		counter++;
 	}
 }
+
+void get_control_device_identity(struct generic_packet *rcv_packet){
+	extra_info *info = (extra_info *)rcv_packet->payload;
+	if(DEBUG_LEVEL>2)
+		printf("Device Name: %s Device Address: %s\n", info->device_name, info->bt_address);
+
+	if(strcmp(info->device_name, master_device->device_name)){
+		new_master_device = (device_info *)malloc(sizeof(device_info*));
+		new_master_device->ip.s_addr = inet_addr(rcv_packet->header.sender_ip);
+		new_master_device->port = atoi(rcv_packet->header.sender_port);
+		strcpy(new_master_device->bt_address, info->bt_address);
+		strcpy(new_master_device->device_name, info->device_name);
+		//printf("Device Name: %s Device Address: %s\n", new_master_device->device_name, new_master_device->bt_address);
+		//printf("Device IP: %s\nDevice Port: %d\n", inet_ntoa(new_master_device->ip), new_master_device->port);
+		new_control_device_found = true;
+		is_identity_required = false;
+	}
+	else{
+		printf("Trusted Device Found.\n");
+		printf("Trusted Device information Updated\n");
+		master_device->ip.s_addr = inet_addr(rcv_packet->header.sender_ip);
+		master_device->port = atoi(rcv_packet->header.sender_port);
+		printf("Trusted device IP: %s\nDevice Port: %d\n", inet_ntoa(master_device->ip), atoi(rcv_packet->header.sender_port));
+		is_master_device_info_updated = true;
+		is_master_device_found = true;
+		is_identity_required = false;
+	}
+}
+
 

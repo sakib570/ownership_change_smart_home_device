@@ -33,5 +33,6 @@ void save_password(struct generic_packet* rcv_packet, int length);
 void save_context(int isFirstContext);
 void save_trusted_device();
 void get_known_context_list();
+void get_control_device_identity(struct generic_packet *rcv_packet);
 
 #endif /* OWNERSHIP_CHANGE_H_ */
