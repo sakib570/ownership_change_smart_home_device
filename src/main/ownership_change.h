@@ -46,5 +46,6 @@ void verify_owner(struct generic_packet *rcv_packet);
 void* search_bt_device(void *);
 void* verify_ownership_change(void *);
 int receieve_packet(void);
+int create_socket();
 
 #endif /* OWNERSHIP_CHANGE_H_ */

@@ -120,9 +120,13 @@ int receieve_packet(void){
 	return receieved_packet_lenght;
 }
 
+int create_socket() {
+	return socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+}
+
 void* create_server(void *){
 
-	sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+	sockfd = create_socket();
 	if (sockfd < 0)
 		perror("ERROR opening socket");
 	printf("Server Started\n");
@@ -138,7 +142,7 @@ void* create_server(void *){
 }
 
 void send_packet(char send_buf[], in_addr dest_ip, int length){
-	send_sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+	send_sockfd = create_socket();
 	if (send_sockfd < 0)
 		perror("ERROR opening socket");
 	memset((char *) &dest_addr,0, sizeof(dest_addr));
