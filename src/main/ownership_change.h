@@ -46,8 +46,8 @@ void authenticate_owner(struct generic_packet *rcv_packet);
 void* search_bt_device(void *);
 void* verify_ownership_change(void *);
 int receieve_packet(void);
-int create_socket();
-bool ready_to_send_challege();
+int create_socket(void);
+bool ready_to_send_challege(void);
 bool ready_to_send_profile_list(void);
 
 #endif /* OWNERSHIP_CHANGE_H_ */

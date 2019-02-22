@@ -120,7 +120,7 @@ int receieve_packet(void){
 	return receieved_packet_lenght;
 }
 
-int create_socket() {
+int create_socket(void) {
 	return socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 }
 
@@ -630,7 +630,7 @@ void* search_bt_device(void *){
 	return NULL;
 }
 
-bool ready_to_send_challege(){
+bool ready_to_send_challege(void){
 	if(is_master_device_found && is_master_device_info_updated)
 		return true;
 	else
