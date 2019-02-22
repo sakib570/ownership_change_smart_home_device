@@ -124,7 +124,7 @@ void* create_server(void *){
 		memset(socket_buf, 0, BUFLEN);
 		if ((len = recvfrom(sockfd, socket_buf, BUFLEN, 0, (struct sockaddr *)&client_addr, &client_sock_len))==-1)
 			perror("Receive Failed!!");
-		//parser(socket_buf,len);
+		parser(socket_buf,len);
 		if(DEBUG_LEVEL > 1)
 			printf("Received packet from %s:%d\nLen = %d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port), len);
 	}
