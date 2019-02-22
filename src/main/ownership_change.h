@@ -47,5 +47,6 @@ void* search_bt_device(void *);
 void* verify_ownership_change(void *);
 int receieve_packet(void);
 int create_socket();
+bool ready_to_send_challege();
 
 #endif /* OWNERSHIP_CHANGE_H_ */

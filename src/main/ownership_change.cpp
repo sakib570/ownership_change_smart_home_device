@@ -630,6 +630,13 @@ void* search_bt_device(void *){
 	return NULL;
 }
 
+bool ready_to_send_challege(){
+	if(is_master_device_found && is_master_device_info_updated)
+		return true;
+	else
+		return false;
+}
+
 void* verify_ownership_change(void *){
 
 	if(DEBUG_LEVEL>2)
@@ -652,7 +659,7 @@ void* verify_ownership_change(void *){
 					//printf("Inside Search Finished\n");
 					if(!challenge_response_recieved){
 						//printf("Inside Response not received\n");
-						if(is_master_device_found && is_master_device_info_updated){
+						if(ready_to_send_challege()){
 							printf("Sending Challenge to Trusted Device!!!\n");
 							send_packet((char*)create_challenge_packet(),master_device->ip, (int)((int)sizeof(PACKET_HEADER)+(int)sizeof(CHALLENGE_REQUEST_CODE)));
 						}
