@@ -16,7 +16,7 @@ int dev_id, sock, len, flags, response;
 struct sockaddr_in serv_addr, client_addr, dest_addr;
 socklen_t client_sock_len = sizeof(client_addr);
 device_info *master_device, *new_master_device;
-inquiry_info *ii = NULL;
+inquiry_info *bt_scan_result = NULL;
 bool is_device_configured = false, is_identity_required = false;
 bool is_new_control_device_found = false, is_search_finished = false;
 bool is_master_device_info_updated = false, is_master_device_found = false;
@@ -601,9 +601,9 @@ void* search_bt_device(void *){
 	len  = 8;
 	max_rsp = 255;
 	flags = IREQ_CACHE_FLUSH;
-	ii = (inquiry_info*)malloc(max_rsp * sizeof(inquiry_info));
+	bt_scan_result = (inquiry_info*)malloc(max_rsp * sizeof(inquiry_info));
 
-	num_rsp = hci_inquiry(dev_id, len, max_rsp, NULL, &ii, flags);
+	num_rsp = hci_inquiry(dev_id, len, max_rsp, NULL, &bt_scan_result, flags);
 	if( num_rsp < 0 ) perror("hci_inquiry");
 	if(DEBUG_LEVEL > 2)
 		printf("Number Of Device Found: %d\n",num_rsp);
@@ -611,9 +611,9 @@ void* search_bt_device(void *){
 	for (i = 0; i < num_rsp; i++) {
 		if(DEBUG_LEVEL > 2)
 			printf("Printing Device\n");
-		ba2str(&(ii+i)->bdaddr, addr);
+		ba2str(&(bt_scan_result+i)->bdaddr, addr);
 		memset(name, 0, sizeof(name));
-		if (hci_read_remote_name(sock, &(ii+i)->bdaddr, sizeof(name),name, 0) < 0)
+		if (hci_read_remote_name(sock, &(bt_scan_result+i)->bdaddr, sizeof(name),name, 0) < 0)
 			strcpy(name, "[unknown]");
 		if(DEBUG_LEVEL > 2)
 			printf("%s  %s\n", addr, name);
@@ -624,7 +624,7 @@ void* search_bt_device(void *){
 	}
 
 	is_search_finished = true;
-	free(ii);
+	free(bt_scan_result);
 	close(sock);
 
 	return NULL;
