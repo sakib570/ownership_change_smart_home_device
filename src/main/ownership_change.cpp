@@ -21,7 +21,7 @@ bool is_device_configured = false, is_identity_required = false;
 bool is_new_control_device_found = false, is_search_finished = false;
 bool is_master_device_info_updated = false, is_master_device_found = false;
 bool is_trusted_device_identity_update_required =false;
-bool is_profile_list_sent =false, change_detected = false;
+bool is_profile_list_sent =false, is_change_detected = false;
 bool challenge_response_recieved = false, is_new_profile_creation_required = false;
 
 int main(void){
@@ -530,7 +530,7 @@ void* check_wifi_ssid(void *){
 			else{
 				memset(changed_context,0, BUFLEN);
 				memcpy(changed_context, current_ssid, BUFLEN);
-				change_detected = true;
+				is_change_detected = true;
 				pthread_cancel(check_ssid_thread);
 			}
 		}
@@ -643,8 +643,8 @@ void* verify_ownership_change(void *){
 		printf("Waiting For Ownership Change\n");
 	while(1){
 		sleep(10);
-		if(change_detected == true){
-			change_detected = false;
+		if(is_change_detected == true){
+			is_change_detected = false;
 			is_search_finished = false;
 			_begin_thread(bt_device_search_thread, search_bt_device);
 			challenge_response_recieved = false;
