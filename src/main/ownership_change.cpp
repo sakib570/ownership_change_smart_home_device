@@ -125,7 +125,7 @@ int create_socket(void) {
 }
 
 void* create_server(void *){
-
+	int packet_length;
 	sockfd = create_socket();
 	if (sockfd < 0)
 		perror("ERROR opening socket");
@@ -136,8 +136,9 @@ void* create_server(void *){
 	serv_addr.sin_port = htons(PORTNUM);
 	if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
 		perror("ERROR on binding");
-	if(receieve_packet())
-		parser(socket_buf,len);
+	packet_length = receieve_packet();
+	if(packet_length)
+		parser(socket_buf, packet_length);
 	return NULL;
 }
 
