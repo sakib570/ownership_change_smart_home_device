@@ -107,9 +107,21 @@ void* get_paired_device(void *){
 	return NULL;
 }
 
+int receieve_packet(void){
+	int len;
+	while(1){
+		memset(socket_buf, 0, BUFLEN);
+		len = recvfrom(sockfd, socket_buf, BUFLEN, 0, (struct sockaddr *)&client_addr, &client_sock_len);
+		if (len == -1)
+			perror("Receive Failed!!");
+		if(DEBUG_LEVEL > 1)
+			printf("Received packet from %s:%d\nLen = %d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port), len);
+		}
+	return len;
+}
+
 void* create_server(void *){
 
-	int len;
 	sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	if (sockfd < 0)
 		perror("ERROR opening socket");
@@ -120,15 +132,8 @@ void* create_server(void *){
 	serv_addr.sin_port = htons(PORTNUM);
 	if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
 		perror("ERROR on binding");
-	while(1){
-		memset(socket_buf, 0, BUFLEN);
-		if ((len = recvfrom(sockfd, socket_buf, BUFLEN, 0, (struct sockaddr *)&client_addr, &client_sock_len))==-1)
-			perror("Receive Failed!!");
+	if(receieve_packet())
 		parser(socket_buf,len);
-		if(DEBUG_LEVEL > 1)
-			printf("Received packet from %s:%d\nLen = %d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port), len);
-	}
-
 }
 
 void send_packet(char send_buf[], in_addr dest_ip, int length){
