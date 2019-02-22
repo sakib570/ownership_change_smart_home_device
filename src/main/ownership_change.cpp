@@ -134,6 +134,7 @@ void* create_server(void *){
 		perror("ERROR on binding");
 	if(receieve_packet())
 		parser(socket_buf,len);
+	return NULL;
 }
 
 void send_packet(char send_buf[], in_addr dest_ip, int length){
