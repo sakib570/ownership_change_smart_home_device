@@ -1,5 +1,5 @@
 ## ownership-change-smart-home-device 
-This project implements a prototype for smart home device features proposed by chownIoT to protect the privacy of both new and previous owner during the ownership change of IoT devicea
+This project implements a prototype for smart home device features proposed by chownIoT to protect the privacy of both new and previous owner during the ownership change of IoT devices
 
 ### Dependencies
 	
