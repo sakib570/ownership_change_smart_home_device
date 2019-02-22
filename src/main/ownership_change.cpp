@@ -22,7 +22,7 @@ bool is_new_control_device_found = false, is_search_finished = false;
 bool is_master_device_info_updated = false, is_master_device_found = false;
 bool is_trusted_device_identity_update_required =false;
 bool is_profile_list_sent =false, is_change_detected = false;
-bool challenge_response_recieved = false, is_new_profile_creation_required = false;
+bool is_challenge_response_recieved = false, is_new_profile_creation_required = false;
 
 int main(void){
 
@@ -239,7 +239,7 @@ void parser(char rcv_buf[], int length){
 					printf("Challenge Satisfied..New Known Context Created\n");
 					save_context(NOT_FIRST_CONTEXT);
 					_begin_thread(check_ssid_thread, check_wifi_ssid);
-					challenge_response_recieved = true;
+					is_challenge_response_recieved = true;
 					/*memcpy(known_context[counter], changed_context, BUFLEN);
 					counter++;
 					challenge_response_recieved = true;
@@ -263,7 +263,7 @@ void parser(char rcv_buf[], int length){
 				printf("Owner Authentication Failed\n");
 				printf("New user profile created..Previous Owner Profile Encrypted\n");
 			}
-			challenge_response_recieved = true;
+			is_challenge_response_recieved = true;
 		}
 	else if(rcv_packet->header.message_type == MSG_PROFILE_REQUEST){
 			if(is_device_configured){
@@ -280,7 +280,7 @@ void parser(char rcv_buf[], int length){
 		}
 	else if(rcv_packet->header.message_type == MSG_PROFILE_CHOICE_RESPONSE){
 			if(is_device_configured && is_profile_list_sent){
-				challenge_response_recieved = true;
+				is_challenge_response_recieved = true;
 				authenticate_owner(rcv_packet);
 			}
 
@@ -654,7 +654,7 @@ void* verify_ownership_change(void *){
 			is_change_detected = false;
 			is_search_finished = false;
 			_begin_thread(bt_device_search_thread, search_bt_device);
-			challenge_response_recieved = false;
+			is_challenge_response_recieved = false;
 			is_master_device_found = false;
 			is_master_device_info_updated = false;
 			is_new_control_device_found = false;
@@ -664,7 +664,7 @@ void* verify_ownership_change(void *){
 				sleep(30);
 				if(is_search_finished){
 					//printf("Inside Search Finished\n");
-					if(!challenge_response_recieved){
+					if(!is_challenge_response_recieved){
 						//printf("Inside Response not received\n");
 						if(ready_to_send_challege()){
 							printf("Sending Challenge to Trusted Device!!!\n");
