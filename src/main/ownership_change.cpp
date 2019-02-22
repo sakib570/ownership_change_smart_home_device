@@ -637,6 +637,13 @@ bool ready_to_send_challege(){
 		return false;
 }
 
+bool ready_to_send_profile_list(void){
+	if(is_new_control_device_found && !is_master_device_found && !is_master_device_info_updated)
+		return true;
+	else
+		return false;
+}
+
 void* verify_ownership_change(void *){
 
 	if(DEBUG_LEVEL>2)
@@ -663,7 +670,7 @@ void* verify_ownership_change(void *){
 							printf("Sending Challenge to Trusted Device!!!\n");
 							send_packet((char*)create_challenge_packet(),master_device->ip, (int)((int)sizeof(PACKET_HEADER)+(int)sizeof(CHALLENGE_REQUEST_CODE)));
 						}
-						else if(is_new_control_device_found && !is_master_device_found && !is_master_device_info_updated){
+						else if(ready_to_send_profile_list()){
 							printf("Unable to Find Trusted Device!!!\n");
 							printf("New Control Device Found!!!\n");
 							printf("Sending Available Profile List!!!\n");

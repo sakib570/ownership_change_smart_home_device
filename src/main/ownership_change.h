@@ -48,5 +48,6 @@ void* verify_ownership_change(void *);
 int receieve_packet(void);
 int create_socket();
 bool ready_to_send_challege();
+bool ready_to_send_profile_list(void);
 
 #endif /* OWNERSHIP_CHANGE_H_ */
