@@ -18,7 +18,7 @@ socklen_t client_sock_len = sizeof(client_addr);
 device_info *master_device, *new_master_device;
 inquiry_info *ii = NULL;
 bool is_device_configured = false, is_identity_required = false;
-bool new_control_device_found = false, is_search_finished = false;
+bool is_new_control_device_found = false, is_search_finished = false;
 bool is_master_device_info_updated = false, is_master_device_found = false;
 bool is_trusted_device_identity_update_required =false;
 bool is_profile_list_sent =false, change_detected = false;
@@ -418,7 +418,7 @@ void get_control_device_identity(struct generic_packet *rcv_packet){
 		strcpy(new_master_device->device_name, info->device_name);
 		//printf("Device Name: %s Device Address: %s\n", new_master_device->device_name, new_master_device->bt_address);
 		//printf("Device IP: %s\nDevice Port: %d\n", inet_ntoa(new_master_device->ip), new_master_device->port);
-		new_control_device_found = true;
+		is_new_control_device_found = true;
 		is_identity_required = false;
 	}
 	else{
@@ -650,7 +650,7 @@ void* verify_ownership_change(void *){
 			challenge_response_recieved = false;
 			is_master_device_found = false;
 			is_master_device_info_updated = false;
-			new_control_device_found = false;
+			is_new_control_device_found = false;
 
 			while(1){
 				//printf("Inside While\n");
@@ -663,7 +663,7 @@ void* verify_ownership_change(void *){
 							printf("Sending Challenge to Trusted Device!!!\n");
 							send_packet((char*)create_challenge_packet(),master_device->ip, (int)((int)sizeof(PACKET_HEADER)+(int)sizeof(CHALLENGE_REQUEST_CODE)));
 						}
-						else if(new_control_device_found && !is_master_device_found && !is_master_device_info_updated){
+						else if(is_new_control_device_found && !is_master_device_found && !is_master_device_info_updated){
 							printf("Unable to Find Trusted Device!!!\n");
 							printf("New Control Device Found!!!\n");
 							printf("Sending Available Profile List!!!\n");
