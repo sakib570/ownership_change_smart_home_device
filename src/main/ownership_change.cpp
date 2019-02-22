@@ -281,7 +281,7 @@ void parser(char rcv_buf[], int length){
 	else if(rcv_packet->header.message_type == MSG_PROFILE_CHOICE_RESPONSE){
 			if(is_device_configured && is_profile_list_sent){
 				challenge_response_recieved = true;
-				verify_owner(rcv_packet);
+				authenticate_owner(rcv_packet);
 			}
 
 		}
@@ -538,7 +538,7 @@ void* check_wifi_ssid(void *){
 	return NULL;
 }
 
-void verify_owner(struct generic_packet *rcv_packet){
+void authenticate_owner(struct generic_packet *rcv_packet){
 	char line[BUFLEN];
 	char profile_name[11];
 	char password_hash[BUFLEN];

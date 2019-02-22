@@ -42,7 +42,7 @@ void get_trusted_device_identity_for_new_profile(struct generic_packet *rcv_pack
 void get_owner_password(char password[]);
 void send_profile_list(in_addr dest_ip);
 void* check_wifi_ssid(void *);
-void verify_owner(struct generic_packet *rcv_packet);
+void authenticate_owner(struct generic_packet *rcv_packet);
 void* search_bt_device(void *);
 void* verify_ownership_change(void *);
 int receieve_packet(void);
