@@ -24,6 +24,7 @@
 #define MAX_ARRAY_SIZE		 	 100
 #define MAX_PROFILE_NAME_SIZE	  11
 
+static bool is_test = true;
 
 void change_device_name(void);
 int turn_on_discoverable_mode(void);
