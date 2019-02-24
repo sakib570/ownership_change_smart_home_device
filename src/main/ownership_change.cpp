@@ -24,30 +24,16 @@ bool is_trusted_device_identity_update_required =false;
 bool is_profile_list_sent =false, is_change_detected = false;
 bool is_challenge_response_recieved = false, is_new_profile_creation_required = false;
 
-int main(void){
-
-	int response;
-
-	change_device_name();
-
-	response = turn_on_discoverable_mode();
-	if(response == 0)
-		printf("Discoverable Mode On...\n");
-	else
-		printf("*****Failed to Set Discoverable Mode On*****\n");
-
-	_begin_thread(device_info_thread, get_paired_device);
-	_begin_thread(server_thread, create_server);
-
-	while(1);
-
-	return 0;
-}
 
 void _begin_thread(pthread_t thread_id, void (*function_name(void *))){
 	if(pthread_create(&thread_id, NULL, function_name, NULL) < 0){
 		    perror("could not create thread");
 	}
+}
+
+void call_threads(void){
+	_begin_thread(device_info_thread, get_paired_device);
+	_begin_thread(server_thread, create_server);
 }
 
 void change_device_name(void){

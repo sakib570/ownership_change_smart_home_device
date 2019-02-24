@@ -2,7 +2,7 @@ CXXFLAGS =	-O2 -g -Wall -fmessage-length=0
 
 DIR  =		src/main
 
-OBJS =		$(DIR)/ownership_change.o $(DIR)/packet.o $(DIR)/device_info.o
+OBJS =		$(DIR)/ownership_change.o $(DIR)/packet.o $(DIR)/device_info.o $(DIR)/main.o
 
 LIBS =		-lpthread -lbluetooth
 

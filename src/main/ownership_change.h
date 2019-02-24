@@ -50,5 +50,6 @@ int receieve_packet(void);
 int create_socket(void);
 bool ready_to_send_challege(void);
 bool ready_to_send_profile_list(void);
+void call_threads(void);
 
 #endif /* OWNERSHIP_CHANGE_H_ */
