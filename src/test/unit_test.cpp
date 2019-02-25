@@ -7,6 +7,7 @@ int main(){
 	test_correctness_of_pw_confirmation_packet_creation();
 	test_correctness_of_challenge_packet_creation();
 	test_correctness_of_pw_request_packet_creation();
+	test_correctness_of_profile_list_packet_creation();
 	return 0;
 }
 
@@ -148,3 +149,48 @@ void test_correctness_of_pw_request_packet_creation(void){
 	}
 
 }
+
+void test_correctness_of_profile_list_packet_creation(void){
+
+	struct generic_packet* profile_list_packet = (struct generic_packet*)malloc(sizeof(struct generic_packet));
+	char* test_ip = (char*)"192.168.0.1";
+	char mock_profile_list[1024][11];
+
+	strcpy(mock_profile_list[1], "Profile 1");
+	strcpy(mock_profile_list[1], "Profile 2");
+	int number_of_mock_profiles = 2;
+
+	profile_list_packet->header.version = 9;
+	profile_list_packet->header.message_type = 0x13;
+	profile_list_packet->header.reserved = 0x0000;
+	profile_list_packet->header.payload_length = htons(number_of_mock_profiles*11);
+	memset(profile_list_packet->header.sender_ip, '\0', 15);
+	strcpy(profile_list_packet->header.sender_ip, test_ip);
+	sprintf(profile_list_packet->header.sender_port,"%d", 6346);
+
+	for(int i = 0; i<number_of_mock_profiles; i++){
+		memset(profile_list_packet->payload+(i*11), '\0', 11);
+		strcpy(profile_list_packet->payload+(i*11), mock_profile_list[i]);
+	}
+
+	char *correct_profile_list_packet = (char*) profile_list_packet;
+
+	char* profile_list_packet_to_test = (char *)create_profile_list_packet(mock_profile_list, number_of_mock_profiles);
+	int packet_length = (int)sizeof(PACKET_HEADER) + (int)(number_of_mock_profiles*11);
+	int compare_value = memcmp(correct_profile_list_packet, profile_list_packet_to_test, packet_length);
+	if(compare_value == 0)
+		printf("Test passed\n");
+	else
+		printf("Test Failed\n");
+	if(DEBUG_LEVEL > 3){
+		int i;
+		for(i=0;i<packet_length;i++)
+			printf("%d ",correct_profile_list_packet[i]);
+		printf("\n");
+		for(i=0;i<packet_length;i++)
+				printf("%d ",profile_list_packet_to_test[i]);
+		printf("\n");
+	}
+
+}
+
