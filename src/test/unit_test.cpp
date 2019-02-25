@@ -6,6 +6,7 @@ int main(){
 	test_correctness_of_ip_info_packet_creation();
 	test_correctness_of_pw_confirmation_packet_creation();
 	test_correctness_of_challenge_packet_creation();
+	test_correctness_of_pw_request_packet_creation();
 	return 0;
 }
 
@@ -109,6 +110,40 @@ void test_correctness_of_challenge_packet_creation(void){
 		printf("\n");
 		for(i=0;i<packet_length;i++)
 				printf("%d ",challenge_packet_to_test[i]);
+		printf("\n");
+	}
+
+}
+
+void test_correctness_of_pw_request_packet_creation(void){
+
+	struct generic_packet* pw_request_packet = (struct generic_packet*)malloc(sizeof(struct generic_packet));
+	char* test_ip = (char*)"192.168.0.1";
+
+	pw_request_packet->header.version = 9;
+	pw_request_packet->header.message_type = 0x08;
+	pw_request_packet->header.reserved = 0x0000;
+	pw_request_packet->header.payload_length = htons(sizeof(0));
+	memset(pw_request_packet->header.sender_ip, '\0', 15);
+	strcpy(pw_request_packet->header.sender_ip, test_ip);
+	sprintf(pw_request_packet->header.sender_port,"%d", 6346);
+
+	char *correct_pw_request_packet = (char*) pw_request_packet;
+
+	char* pw_request_packet_to_test = (char *)create_pw_request_packet();
+	int packet_length = (int)sizeof(PACKET_HEADER);
+	int compare_value = memcmp(correct_pw_request_packet, pw_request_packet_to_test, packet_length);
+	if(compare_value == 0)
+		printf("Test passed\n");
+	else
+		printf("Test Failed\n");
+	if(DEBUG_LEVEL > 3){
+		int i;
+		for(i=0;i<packet_length;i++)
+			printf("%d ",correct_pw_request_packet[i]);
+		printf("\n");
+		for(i=0;i<packet_length;i++)
+				printf("%d ",pw_request_packet_to_test[i]);
 		printf("\n");
 	}
 
