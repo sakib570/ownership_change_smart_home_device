@@ -20,6 +20,8 @@ void test_correctness_of_ip_info_packet_creation(void){
 	struct generic_packet* ip_info_packet = (struct generic_packet*)malloc(sizeof(struct generic_packet));
 	char* test_ip = (char*)"192.168.0.1";
 
+	printf("-> Testing correctness of ip_info_packet creation...\n");
+
 	ip_info_packet->header.version = 9;
 	ip_info_packet->header.message_type = 0x02;
 	ip_info_packet->header.reserved = 0x0000;
@@ -34,10 +36,11 @@ void test_correctness_of_ip_info_packet_creation(void){
 	char* ip_info_packet_to_test = (char *)create_ip_info_packet();
 	int packet_length = (int)sizeof(PACKET_HEADER) + (int)sizeof(DEVICE_NAME);
 	int compare_value = memcmp(correct_ip_info_packet, ip_info_packet_to_test, packet_length);
+	printf("\t->Test Result: ");
 	if(compare_value == 0)
-		printf("Test passed\n");
+		printf("Passed\n\n");
 	else
-		printf("Test Failed\n");
+		printf("Failed\n\n");
 	if(DEBUG_LEVEL > 3){
 		int i;
 		for(i=0;i<packet_length;i++)
@@ -55,6 +58,8 @@ void test_correctness_of_pw_confirmation_packet_creation(void){
 	struct generic_packet* pw_confirmation_packet = (struct generic_packet*)malloc(sizeof(struct generic_packet));
 	char* test_ip = (char*)"192.168.0.1";
 
+	printf("-> Testing correctness of pw_confirmation_packet creation...\n");
+
 	pw_confirmation_packet->header.version = 9;
 	pw_confirmation_packet->header.message_type = 0x04;
 	pw_confirmation_packet->header.reserved = 0x0000;
@@ -69,10 +74,11 @@ void test_correctness_of_pw_confirmation_packet_creation(void){
 	char* pw_confirmation_packet_to_test = (char *)create_pw_confirmation_packet();
 	int packet_length = (int)sizeof(PACKET_HEADER) + (int)sizeof(PW_CONFIRMATION_CODE);
 	int compare_value = memcmp(correct_pw_confirmation_packet, pw_confirmation_packet_to_test, packet_length);
+	printf("\t->Test Result: ");
 	if(compare_value == 0)
-		printf("Test passed\n");
+		printf("Passed\n\n");
 	else
-		printf("Test Failed\n");
+		printf("Failed\n\n");
 	if(DEBUG_LEVEL > 3){
 		int i;
 		for(i=0;i<packet_length;i++)
@@ -90,6 +96,8 @@ void test_correctness_of_challenge_packet_creation(void){
 	struct generic_packet* challenge_packet = (struct generic_packet*)malloc(sizeof(struct generic_packet));
 	char* test_ip = (char*)"192.168.0.1";
 
+	printf("-> Testing correctness of challenge_packet creation...\n");
+
 	challenge_packet->header.version = 9;
 	challenge_packet->header.message_type = 0x06;
 	challenge_packet->header.reserved = 0x0000;
@@ -104,10 +112,11 @@ void test_correctness_of_challenge_packet_creation(void){
 	char* challenge_packet_to_test = (char *)create_challenge_packet();
 	int packet_length = (int)sizeof(PACKET_HEADER) + (int)sizeof(CHALLENGE_REQUEST_CODE);
 	int compare_value = memcmp(correct_challenge_packet, challenge_packet_to_test, packet_length);
+	printf("\t->Test Result: ");
 	if(compare_value == 0)
-		printf("Test passed\n");
+		printf("Passed\n\n");
 	else
-		printf("Test Failed\n");
+		printf("Failed\n\n");
 	if(DEBUG_LEVEL > 3){
 		int i;
 		for(i=0;i<packet_length;i++)
@@ -125,6 +134,8 @@ void test_correctness_of_pw_request_packet_creation(void){
 	struct generic_packet* pw_request_packet = (struct generic_packet*)malloc(sizeof(struct generic_packet));
 	char* test_ip = (char*)"192.168.0.1";
 
+	printf("-> Testing correctness of pw_request_packet creation...\n");
+
 	pw_request_packet->header.version = 9;
 	pw_request_packet->header.message_type = 0x08;
 	pw_request_packet->header.reserved = 0x0000;
@@ -138,10 +149,11 @@ void test_correctness_of_pw_request_packet_creation(void){
 	char* pw_request_packet_to_test = (char *)create_pw_request_packet();
 	int packet_length = (int)sizeof(PACKET_HEADER);
 	int compare_value = memcmp(correct_pw_request_packet, pw_request_packet_to_test, packet_length);
+	printf("\t->Test Result: ");
 	if(compare_value == 0)
-		printf("Test passed\n");
+		printf("Passed\n\n");
 	else
-		printf("Test Failed\n");
+		printf("Failed\n\n");
 	if(DEBUG_LEVEL > 3){
 		int i;
 		for(i=0;i<packet_length;i++)
@@ -159,6 +171,8 @@ void test_correctness_of_profile_list_packet_creation(void){
 	struct generic_packet* profile_list_packet = (struct generic_packet*)malloc(sizeof(struct generic_packet));
 	char* test_ip = (char*)"192.168.0.1";
 	char mock_profile_list[1024][11];
+
+	printf("-> Testing correctness of profile_list_packet creation...\n");
 
 	strcpy(mock_profile_list[1], "Profile 1");
 	strcpy(mock_profile_list[1], "Profile 2");
@@ -182,10 +196,11 @@ void test_correctness_of_profile_list_packet_creation(void){
 	char* profile_list_packet_to_test = (char *)create_profile_list_packet(mock_profile_list, number_of_mock_profiles);
 	int packet_length = (int)sizeof(PACKET_HEADER) + (int)(number_of_mock_profiles*11);
 	int compare_value = memcmp(correct_profile_list_packet, profile_list_packet_to_test, packet_length);
+	printf("\t->Test Result: ");
 	if(compare_value == 0)
-		printf("Test passed\n");
+		printf("Passed\n\n");
 	else
-		printf("Test Failed\n");
+		printf("Failed\n\n");
 	if(DEBUG_LEVEL > 3){
 		int i;
 		for(i=0;i<packet_length;i++)
@@ -203,6 +218,8 @@ void test_correctness_of_profile_authetication_response_packet_creation(void){
 	struct generic_packet* profile_authetication_response_packet = (struct generic_packet*)malloc(sizeof(struct generic_packet));
 	char* test_ip = (char*)"192.168.0.1";
 
+	printf("-> Testing correctness of profile_authentication_response_packet creation...\n");
+
 	profile_authetication_response_packet->header.version = 9;
 	profile_authetication_response_packet->header.message_type = 0x19;
 	profile_authetication_response_packet->header.reserved = 0x0000;
@@ -217,10 +234,11 @@ void test_correctness_of_profile_authetication_response_packet_creation(void){
 	char* profile_authetication_response_packet_to_test = (char *)create_profile_authetication_response_packet(1);
 	int packet_length = (int)sizeof(PACKET_HEADER) + (int)sizeof(AUTHENTICATION_SUCCESS);
 	int compare_value = memcmp(correct_profile_authetication_response_packet, profile_authetication_response_packet_to_test, packet_length);
+	printf("\t->Test Result: ");
 	if(compare_value == 0)
-		printf("Test passed\n");
+		printf("Passed\n\n");
 	else
-		printf("Test Failed\n");
+		printf("Failed\n\n");
 	if(DEBUG_LEVEL > 3){
 		int i;
 		for(i=0;i<packet_length;i++)
@@ -264,9 +282,9 @@ void test_condition_correctness_of_ready_to_send_challenge(void){
 		test_pass_count++;
 	printf("\t->Test Result: ");
 	if(test_pass_count == 4)
-		printf("Passed\n");
+		printf("Passed\n\n");
 	else
-		printf("Failed\n");
+		printf("Failed\n\n");
 }
 
 void test_condition_correctness_of_ready_to_send_profile_list(void){
@@ -333,9 +351,9 @@ void test_condition_correctness_of_ready_to_send_profile_list(void){
 
 	printf("\t->Test Result: ");
 	if(test_pass_count == 8)
-		printf("Passed\n");
+		printf("Passed\n\n");
 	else
-		printf("Failed\n");
+		printf("Failed\n\n");
 }
 
 void test_correctness_of_owner_password_retrieval_from_file(void){
@@ -361,8 +379,8 @@ void test_correctness_of_owner_password_retrieval_from_file(void){
 
 	printf("\t->Test Result: ");
 	if(memcmp(retrieved_password, mock_profile->passsword, sizeof("123456")) == 0)
-		printf("Passed\n");
+		printf("Passed\n\n");
 	else
-		printf("Failed\n");
+		printf("Failed\n\n");
 }
 
