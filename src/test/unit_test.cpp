@@ -9,6 +9,7 @@ int main(){
 	test_correctness_of_pw_request_packet_creation();
 	test_correctness_of_profile_list_packet_creation();
 	test_correctness_of_profile_authetication_response_packet_creation();
+	test_condition_correctness_of_ready_to_send_challenge();
 	return 0;
 }
 
@@ -228,5 +229,41 @@ void test_correctness_of_profile_authetication_response_packet_creation(void){
 		printf("\n");
 	}
 
+}
+
+void test_condition_correctness_of_ready_to_send_challenge(void){
+
+	printf("-> Testing condition correctness of ready_send_challenge() function...\n");
+	extern bool is_master_device_found, is_master_device_info_updated;
+	int test_pass_count= 0;
+
+	/* if both booleans are true the function should return true */
+	is_master_device_found = true;
+	is_master_device_info_updated = true;
+	if(ready_to_send_challege())
+		test_pass_count++;
+
+	/* if either of the booleans is false function should return false */
+	is_master_device_found = false;
+	is_master_device_info_updated = true;
+	if(!ready_to_send_challege())
+		test_pass_count++;
+
+	/* if either of the booleans is false function should return false */
+	is_master_device_found = true;
+	is_master_device_info_updated = false;
+	if(!ready_to_send_challege())
+		test_pass_count++;
+
+	/* if both booleans are false false function should return false */
+	is_master_device_found = false;
+	is_master_device_info_updated = false;
+	if(!ready_to_send_challege())
+		test_pass_count++;
+	printf("\t->Test Result: ");
+	if(test_pass_count == 4)
+		printf("Passed\n");
+	else
+		printf("Failed\n");
 }
 
