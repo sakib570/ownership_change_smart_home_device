@@ -9,6 +9,7 @@ This project implements a prototype for smart home device features proposed by c
 ### Software Dependencies
 * OS: Tested on Ubuntu 18.04/16.04 & Raspbian Jessie
 * Library: Bluez 
+Install the bluetooth library using the following command: 
 ```bash
 sudo apt install libbluetooth-dev
 ```
@@ -30,6 +31,7 @@ sudo ./ownership_change
 
 ### Building and Running the Test
 To build and run the test at first navigate to test folder located in the src directory of the project using the following command:
+```bash
 cd path/ownership_change_smart_home_device/src/test
 ```
 Once you are in the test folder build the project with following command:
