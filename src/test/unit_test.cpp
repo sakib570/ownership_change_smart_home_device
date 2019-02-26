@@ -11,6 +11,7 @@ int main(){
 	test_correctness_of_profile_authetication_response_packet_creation();
 	test_condition_correctness_of_ready_to_send_challenge();
 	test_condition_correctness_of_ready_to_send_profile_list();
+	test_correctness_of_owner_password_retrieval_from_file();
 	return 0;
 }
 
@@ -330,10 +331,36 @@ void test_condition_correctness_of_ready_to_send_profile_list(void){
 	if(!ready_to_send_profile_list())
 		test_pass_count++;
 
-
-
 	printf("\t->Test Result: ");
 	if(test_pass_count == 8)
+		printf("Passed\n");
+	else
+		printf("Failed\n");
+}
+
+void test_correctness_of_owner_password_retrieval_from_file(void){
+
+	profile_info *mock_profile = (profile_info*)malloc(sizeof(profile_info));
+	memset(mock_profile, '\0', sizeof(profile_info));
+	memcpy(mock_profile->passsword, "123456", sizeof("123456"));
+	FILE *fp = fopen("Password.txt", "w");
+
+	printf("-> Testing condition correctness owner password retrieval from file...\n");
+
+	if (fp == NULL)
+	{
+		printf("Error opening file!\n");
+		exit(1);
+	}
+
+	fprintf(fp, "%s", mock_profile->passsword);
+	fclose(fp);
+
+	char retrieved_password[BUFLEN];
+	get_owner_password(retrieved_password);
+
+	printf("\t->Test Result: ");
+	if(memcmp(retrieved_password, mock_profile->passsword, sizeof("123456")) == 0)
 		printf("Passed\n");
 	else
 		printf("Failed\n");
