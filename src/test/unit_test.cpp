@@ -8,6 +8,7 @@ int main(){
 	test_correctness_of_challenge_packet_creation();
 	test_correctness_of_pw_request_packet_creation();
 	test_correctness_of_profile_list_packet_creation();
+	test_correctness_of_profile_authetication_response_packet_creation();
 	return 0;
 }
 
@@ -189,6 +190,41 @@ void test_correctness_of_profile_list_packet_creation(void){
 		printf("\n");
 		for(i=0;i<packet_length;i++)
 				printf("%d ",profile_list_packet_to_test[i]);
+		printf("\n");
+	}
+
+}
+
+void test_correctness_of_profile_authetication_response_packet_creation(void){
+
+	struct generic_packet* profile_authetication_response_packet = (struct generic_packet*)malloc(sizeof(struct generic_packet));
+	char* test_ip = (char*)"192.168.0.1";
+
+	profile_authetication_response_packet->header.version = 9;
+	profile_authetication_response_packet->header.message_type = 0x19;
+	profile_authetication_response_packet->header.reserved = 0x0000;
+	profile_authetication_response_packet->header.payload_length = htons(sizeof("0x01"));
+	memset(profile_authetication_response_packet->header.sender_ip, '\0', 15);
+	strcpy(profile_authetication_response_packet->header.sender_ip, test_ip);
+	sprintf(profile_authetication_response_packet->header.sender_port,"%d", 6346);
+	strcpy(profile_authetication_response_packet->payload, "0x01");
+
+	char *correct_profile_authetication_response_packet = (char*) profile_authetication_response_packet;
+
+	char* profile_authetication_response_packet_to_test = (char *)create_profile_authetication_response_packet(1);
+	int packet_length = (int)sizeof(PACKET_HEADER) + (int)sizeof(AUTHENTICATION_SUCCESS);
+	int compare_value = memcmp(correct_profile_authetication_response_packet, profile_authetication_response_packet_to_test, packet_length);
+	if(compare_value == 0)
+		printf("Test passed\n");
+	else
+		printf("Test Failed\n");
+	if(DEBUG_LEVEL > 3){
+		int i;
+		for(i=0;i<packet_length;i++)
+			printf("%d ",correct_profile_authetication_response_packet[i]);
+		printf("\n");
+		for(i=0;i<packet_length;i++)
+				printf("%d ",profile_authetication_response_packet_to_test[i]);
 		printf("\n");
 	}
 
