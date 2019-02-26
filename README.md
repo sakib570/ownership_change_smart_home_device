@@ -1,8 +1,45 @@
-## ownership-change-smart-home-device 
+# ownership-change-smart-home-device 
 This project implements a prototype for smart home device features proposed by chownIoT to protect the privacy of both new and previous owner during the ownership change of IoT devices
 
-### Dependencies
-	
-### How to build and run the project
+## Dependencies
+### Hardware Dependencies
+* Bluetooth
+* Wi-Fi
 
-### Commit convetion 
+### Software Dependencies
+* OS: Tested on Ubuntu 18.04/16.04 & Raspbian Jessie
+* Library: Bluez 
+```bash
+sudo apt install libbluetooth-dev
+```
+	
+## How to build and run the project
+### Building and Running the Project
+First clone the project and navigate to the ownership_change_smart_home_device directory in Terminal using following command:
+```bash
+cd path/ownership_change_smart_home_device
+```
+Once you are inside the ownership_change_smart_home_device folder first build the project with the following command:
+```bash
+make clean all
+```
+To run project you need to have the *sudo* rights in the working computer. With sudo rights to run the project enter the following command:
+```bash
+sudo ./ownership_change
+```
+
+### Building and Running the Test
+To build and run the test at first navigate to test folder located in the src directory of the project using the following command:
+cd path/ownership_change_smart_home_device/src/test
+```
+Once you are in the test folder build the project with following command:
+```bash
+make clean all
+```
+To run the project enter the following command:
+```bash
+./unit_test
+```
+
+
+## Commit convention 
