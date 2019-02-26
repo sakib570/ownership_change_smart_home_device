@@ -47,9 +47,9 @@ To run the project enter the following command:
 
 ## Commit convention 
 The following prefixes are used as a convention for the commit messages of the project:
-*feat: Adding new feature or functionality in the project
-*fix: Any changes related to fixing any bug or issues
-*refactor: Any change related to refactoring the existing code to improve readability
-*chore: Updating the Makefile or any other work not related to change in actual code base
-*test: Adding, fixing or any other changes related to test
-*doc: Any changes related to the documentation of the project
+* feat: Adding new feature or functionality in the project
+* fix: Any changes related to fixing any bug or issues
+* refactor: Any change related to refactoring the existing code to improve readability
+* chore: Updating the Makefile or any other work not related to change in actual code base
+* test: Adding, fixing or any other changes related to test
+* doc: Any changes related to the documentation of the project
