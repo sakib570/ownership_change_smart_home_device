@@ -10,6 +10,7 @@ int main(){
 	test_correctness_of_profile_list_packet_creation();
 	test_correctness_of_profile_authetication_response_packet_creation();
 	test_condition_correctness_of_ready_to_send_challenge();
+	test_condition_correctness_of_ready_to_send_profile_list();
 	return 0;
 }
 
@@ -262,6 +263,77 @@ void test_condition_correctness_of_ready_to_send_challenge(void){
 		test_pass_count++;
 	printf("\t->Test Result: ");
 	if(test_pass_count == 4)
+		printf("Passed\n");
+	else
+		printf("Failed\n");
+}
+
+void test_condition_correctness_of_ready_to_send_profile_list(void){
+
+	printf("-> Testing condition correctness of ready_send_profile_list() function...\n");
+	extern bool is_master_device_found, is_master_device_info_updated, is_new_control_device_found;
+	int test_pass_count= 0;
+
+	/* if is_new_control device is true and other two are false the function should return true */
+	is_master_device_found = false;
+	is_master_device_info_updated = false;
+	is_new_control_device_found = true;
+	if(ready_to_send_profile_list())
+		test_pass_count++;
+
+	/* for all other combination of the boolean values the function should return false */
+	is_master_device_found = true;
+	is_master_device_info_updated = true;
+	is_new_control_device_found = true;
+	if(!ready_to_send_profile_list())
+		test_pass_count++;
+
+	/* for all other combination of the boolean values the function should return false */
+	is_master_device_found = true;
+	is_master_device_info_updated = false;
+	is_new_control_device_found = true;
+	if(!ready_to_send_profile_list())
+		test_pass_count++;
+
+	/* for all other combination of the boolean values the function should return false */
+	is_master_device_found = true;
+	is_master_device_info_updated = false;
+	is_new_control_device_found = false;
+	if(!ready_to_send_profile_list())
+		test_pass_count++;
+
+	/* for all other combination of the boolean values the function should return false */
+	is_master_device_found = true;
+	is_master_device_info_updated = true;
+	is_new_control_device_found = false;
+	if(!ready_to_send_profile_list())
+		test_pass_count++;
+
+	/* for all other combination of the boolean values the function should return false */
+	is_master_device_found = false;
+	is_master_device_info_updated = true;
+	is_new_control_device_found = false;
+	if(!ready_to_send_profile_list())
+		test_pass_count++;
+
+	/* for all other combination of the boolean values the function should return false */
+	is_master_device_found = false;
+	is_master_device_info_updated = true;
+	is_new_control_device_found = true;
+	if(!ready_to_send_profile_list())
+		test_pass_count++;
+
+	/* for all other combination of the boolean values the function should return false */
+	is_master_device_found = false;
+	is_master_device_info_updated = false;
+	is_new_control_device_found = false;
+	if(!ready_to_send_profile_list())
+		test_pass_count++;
+
+
+
+	printf("\t->Test Result: ");
+	if(test_pass_count == 8)
 		printf("Passed\n");
 	else
 		printf("Failed\n");
