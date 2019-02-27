@@ -1,3 +1,11 @@
+//============================================================================
+// Name        : device_info.cpp
+// Author      : Md Sakib Nizam Khan
+// Version     :
+// Copyright   : Copyright (C) 2019 SSG-Aalto {msnkhan@kth.se}
+// Description :
+//============================================================================
+
 #include "device_info.h"
 #include "ownership_change.h"
 

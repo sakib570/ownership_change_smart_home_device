@@ -1,3 +1,11 @@
+//============================================================================
+// Name        : unit_test.cpp
+// Author      : Md Sakib Nizam Khan
+// Version     :
+// Copyright   : Copyright (C) 2019 SSG-Aalto {msnkhan@kth.se}
+// Description :
+//============================================================================
+
 #include "unit_test.h"
 
 int main(){

@@ -1,3 +1,11 @@
+//============================================================================
+// Name        : ownership_change.h
+// Author      : Md Sakib Nizam Khan
+// Version     :
+// Copyright   : Copyright (C) 2019 SSG-Aalto {msnkhan@kth.se}
+// Description :
+//============================================================================
+
 #ifndef OWNERSHIP_CHANGE_H_
 #define OWNERSHIP_CHANGE_H_
 

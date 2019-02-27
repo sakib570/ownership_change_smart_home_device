@@ -1,3 +1,11 @@
+//============================================================================
+// Name        : unit_test.h
+// Author      : Md Sakib Nizam Khan
+// Version     :
+// Copyright   : Copyright (C) 2019 SSG-Aalto {msnkhan@kth.se}
+// Description :
+//============================================================================
+
 #include <stdio.h>
 #include "../main/ownership_change.h"
 #include "../main/device_info.h"

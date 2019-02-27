@@ -1,3 +1,11 @@
+//============================================================================
+// Name        : device_info.h
+// Author      : Md Sakib Nizam Khan
+// Version     :
+// Copyright   : Copyright (C) 2019 SSG-Aalto {msnkhan@kth.se}
+// Description :
+//============================================================================
+
 #ifndef DEVICE_INFO_H_
 #define DEVICE_INFO_H_
 
