@@ -8,6 +8,7 @@ This project implements a prototype for smart home device features proposed by c
 
 ### Software Dependencies
 * OS: Tested on Ubuntu 18.04/16.04 & Raspbian Jessie
+* Compiler: g++
 * Library: Bluez 
 
 Install the bluetooth library using the following command: 
@@ -35,11 +36,11 @@ To build and run the test at first navigate to *test* folder located in the *src
 ```bash
 cd path/ownership_change_smart_home_device/src/test
 ```
-Once you are in the *test* folder build the project with following command:
+Once you are in the *test* folder build the test with following command:
 ```bash
 make clean all
 ```
-To run the project enter the following command:
+To run the test enter the following command:
 ```bash
 ./unit_test
 ```
@@ -48,7 +49,7 @@ To run the project enter the following command:
 ## Commit convention 
 The following prefixes are used as a convention for the commit messages of the project:
 * *feat*: Adding new feature or functionality in the project
-* *fix*: Any changes related to fixing any bug or issues
+* *fix*: Any changes related to fixing bugs or issues
 * *refactor*: Any change related to refactoring the existing code to improve readability
 * *chore*: Updating the Makefile or any other work not related to change in actual code base
 * *test*: Adding, fixing or any other changes related to test
