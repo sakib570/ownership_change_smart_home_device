@@ -1,4 +1,4 @@
-CXXFLAGS =	-O2 -g -Wall -fmessage-length=0  
+CXXFLAGS =	-O2 -w -g -Wall -fmessage-length=0  
 
 DIR  =		src/main
 
