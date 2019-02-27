@@ -23,6 +23,19 @@ int main(){
 	return 0;
 }
 
+/*------------test_correctness_of_ip_info_packet_creation---------------------
+ |																			 |
+ |  Purpose:  The purpose of the function is to test whether the 			 |
+ |	create_ip_info_packet() function is generating the ip_info_packet        |
+ |	in correct format or not. To do so, this function first creates          |
+ |	a mock ip_info_packet in the correct format and then calls the           |
+ |	create_ip_info_packet() and compares the returned packet with the mock   |
+ |	packet. If the both packets are same then test is passed and failed      |
+ |	otherwise.                        										 |
+ |																			 |
+ |  Parameters: None														 |
+ |  Returns:  None															 |
+ *--------------------------------------------------------------------------*/
 void test_correctness_of_ip_info_packet_creation(void){
 
 	struct generic_packet* ip_info_packet = (struct generic_packet*)malloc(sizeof(struct generic_packet));
@@ -60,6 +73,20 @@ void test_correctness_of_ip_info_packet_creation(void){
 	}
 
 }
+
+/*-----------test_correctness_of_pw_confirmation_packet_creation--------------
+ |																			 |
+ |  Purpose:  The purpose of the function is to test whether the 			 |
+ |	create_pw_confirmation_packet() function is generating the packet        |
+ |	in correct format or not. To do so, this function first creates          |
+ |	a mock pw_confirmation_packet in the correct format and then calls the   |
+ |	create_pw_confirmation_packet() and compares the returned packet with    |
+ |	the mock packet. If both packets are same then test is passed and        |
+ |	failed otherwise. 													     |
+ |																			 |
+ |  Parameters: None														 |
+ |  Returns:  None															 |
+ *--------------------------------------------------------------------------*/
 
 void test_correctness_of_pw_confirmation_packet_creation(void){
 
@@ -99,6 +126,20 @@ void test_correctness_of_pw_confirmation_packet_creation(void){
 
 }
 
+/*---------------test_correctness_of_challenge_packet_creation----------------
+ |																			 |
+ |  Purpose:  The purpose of the function is to test whether the 			 |
+ |	create_challenge_packet() function is generating the packet              |
+ |	in correct format or not. To do so, this function first creates          |
+ |	a mock challenge packet in the correct format and then calls the         |
+ |	create_challenge_packet() and compares the returned packet with          |
+ |	the mock packet. If both packets are same then test is passed and        |
+ |	failed otherwise. 													     |
+ |																			 |
+ |  Parameters: None														 |
+ |  Returns:  None															 |
+ *--------------------------------------------------------------------------*/
+
 void test_correctness_of_challenge_packet_creation(void){
 
 	struct generic_packet* challenge_packet = (struct generic_packet*)malloc(sizeof(struct generic_packet));
@@ -137,6 +178,20 @@ void test_correctness_of_challenge_packet_creation(void){
 
 }
 
+/*--------------test_correctness_of_pw_request_packet_creation----------------
+ |																			 |
+ |  Purpose:  The purpose of the function is to test whether the 			 |
+ |	create_pw_request_packet() function is generating the packet             |
+ |	in correct format or not. To do so, this function first creates          |
+ |	a mock pw_request_packet in the correct format and then calls the        |
+ |	create_pw_request_packet() and compares the returned packet with         |
+ |	the mock packet. If both packets are same then test is passed and        |
+ |	failed otherwise. 													     |
+ |																			 |
+ |  Parameters: None														 |
+ |  Returns:  None															 |
+ *--------------------------------------------------------------------------*/
+
 void test_correctness_of_pw_request_packet_creation(void){
 
 	struct generic_packet* pw_request_packet = (struct generic_packet*)malloc(sizeof(struct generic_packet));
@@ -174,6 +229,19 @@ void test_correctness_of_pw_request_packet_creation(void){
 
 }
 
+/*--------------test_correctness_of_profile_list_packet_creation--------------
+ |																			 |
+ |  Purpose:  The purpose of the function is to test whether the 			 |
+ |	create_profile_list_packet() function is generating the packet           |
+ |	in correct format or not. To do so, this function first creates          |
+ |	a mock profile_list_packet in the correct format and then calls the      |
+ |	create_profile_list_packet() and compares the returned packet with       |
+ |	the mock packet. If both packets are same then test is passed and        |
+ |	failed otherwise. 													     |
+ |																			 |
+ |  Parameters: None														 |
+ |  Returns:  None															 |
+ *--------------------------------------------------------------------------*/
 void test_correctness_of_profile_list_packet_creation(void){
 
 	struct generic_packet* profile_list_packet = (struct generic_packet*)malloc(sizeof(struct generic_packet));
@@ -221,6 +289,20 @@ void test_correctness_of_profile_list_packet_creation(void){
 
 }
 
+/*----test_correctness_of_profile_authetication_response_packet_creation------
+ |																			 |
+ |  Purpose:  The purpose of the function is to test whether the 			 |
+ |	create_profile_authetication_response_packet() function is generating    |
+ |	the packet in correct format or not. To do so, this function first       |
+ |	creates a mock profile_list_packet in the correct format and then calls  |
+ |	the create_profile_authetication_response_packet() and compares the      |
+ |	returned packet with the mock packet. If both packets are same then test |
+ |	is passed and failed otherwise. 									     |
+ |																			 |
+ |  Parameters: None														 |
+ |  Returns:  None															 |
+ *--------------------------------------------------------------------------*/
+
 void test_correctness_of_profile_authetication_response_packet_creation(void){
 
 	struct generic_packet* profile_authetication_response_packet = (struct generic_packet*)malloc(sizeof(struct generic_packet));
@@ -259,6 +341,18 @@ void test_correctness_of_profile_authetication_response_packet_creation(void){
 
 }
 
+/*-----------test_condition_correctness_of_ready_to_send_challenge------------
+ |																			 |
+ |  Purpose:  The purpose of the function is to test whether the  			 |
+ |	ready_to_send_challege() function is returning correct values or not.    |
+ |	To do so, it first sets boolean values in different possible combinations|
+ |	and observes the output. If the function returns correct values in all   |
+ |	possible cases then the test is passed and failed otherwise.             |
+ |																			 |
+ |  Parameters: None														 |
+ |  Returns:  None															 |
+ *--------------------------------------------------------------------------*/
+
 void test_condition_correctness_of_ready_to_send_challenge(void){
 
 	printf("-> Testing condition correctness of ready_send_challenge() function...\n");
@@ -294,6 +388,18 @@ void test_condition_correctness_of_ready_to_send_challenge(void){
 	else
 		printf("Failed\n\n");
 }
+
+/*---------test_condition_correctness_of_ready_to_send_profile_list-----------
+ |																			 |
+ |  Purpose:  The purpose of the function is to test whether the  			 |
+ |	ready_to_send_profile_list() function is returning correct values or not.|
+ |	To do so, it first sets boolean values in different possible combinations|
+ |	and observes the output. If the function returns correct values in all   |
+ |	possible cases then the test is passed and failed otherwise.             |
+ |																			 |
+ |  Parameters: None														 |
+ |  Returns:  None															 |
+ *--------------------------------------------------------------------------*/
 
 void test_condition_correctness_of_ready_to_send_profile_list(void){
 
@@ -363,6 +469,18 @@ void test_condition_correctness_of_ready_to_send_profile_list(void){
 	else
 		printf("Failed\n\n");
 }
+
+/*----------test_correctness_of_owner_password_retrieval_from_file------------
+ |																			 |
+ |  Purpose:  The purpose of the function is to test whether the  			 |
+ |	get_owner_passowrd() function is retrieving password from file correctly |
+ |	or not. To do so, it first saves a mock password in the password file    |
+ |	and then calls the function. If the returned password matches the mock   |
+ |	password then the test is passed and failed otherwise.                   |
+ |																			 |
+ |  Parameters: None														 |
+ |  Returns:  None															 |
+ *--------------------------------------------------------------------------*/
 
 void test_correctness_of_owner_password_retrieval_from_file(void){
 
